@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model activity_logs {
+  id         Int       @id @default(autoincrement())
+  task_id    Int?
+  user_id    Int?
+  action     String?   @db.VarChar(100)
+  old_value  Json?
+  new_value  Json?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  tasks      tasks?    @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model ai_histories {
+  id          Int             @id @default(autoincrement())
+  task_id     Int?
+  user_id     Int?
+  action_type ai_action_type?
+  prompt      String?
+  response    String?
+  created_at  DateTime?       @default(now()) @db.Timestamp(6)
+  tasks       tasks?          @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users       users?          @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model project_members {
+  id         Int       @id @default(autoincrement())
+  project_id Int?
+  user_id    Int?
+  role       String?   @db.VarChar(50)
+  joined_at  DateTime? @default(now()) @db.Timestamp(6)
+  projects   projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([project_id, user_id])
+}
+
+model projects {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(255)
+  description     String?
+  owner_id        Int?
+  status          project_status?   @default(ACTIVE)
+  created_at      DateTime?         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?         @default(now()) @db.Timestamp(6)
+  project_members project_members[]
+  users           users?            @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tasks           tasks[]
+}
+
+model tags {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique @db.VarChar(100)
+  created_at DateTime?   @default(now()) @db.Timestamp(6)
+  task_tags  task_tags[]
+}
+
+model task_attachments {
+  id          Int       @id @default(autoincrement())
+  task_id     Int?
+  file_url    String
+  uploaded_by Int?
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  tasks       tasks?    @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users       users?    @relation(fields: [uploaded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model task_comments {
+  id         Int       @id @default(autoincrement())
+  task_id    Int?
+  user_id    Int?
+  content    String
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  tasks      tasks?    @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([task_id], map: "idx_comments_task")
+}
+
+model task_tags {
+  id      Int    @id @default(autoincrement())
+  task_id Int?
+  tag_id  Int?
+  tags    tags?  @relation(fields: [tag_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tasks   tasks? @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([task_id, tag_id])
+}
+
+model tasks {
+  id                             Int                @id @default(autoincrement())
+  title                          String             @db.VarChar(255)
+  description                    String?
+  project_id                     Int?
+  creator_id                     Int?
+  assignee_id                    Int?
+  status                         task_status?       @default(TODO)
+  priority                       task_priority?     @default(MEDIUM)
+  deadline                       DateTime?          @db.Timestamp(6)
+  created_at                     DateTime?          @default(now()) @db.Timestamp(6)
+  updated_at                     DateTime?          @default(now()) @db.Timestamp(6)
+  activity_logs                  activity_logs[]
+  ai_histories                   ai_histories[]
+  task_attachments               task_attachments[]
+  task_comments                  task_comments[]
+  task_tags                      task_tags[]
+  users_tasks_assignee_idTousers users?             @relation("tasks_assignee_idTousers", fields: [assignee_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_tasks_creator_idTousers  users?             @relation("tasks_creator_idTousers", fields: [creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  projects                       projects?          @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([assignee_id], map: "idx_tasks_assignee")
+  @@index([project_id], map: "idx_tasks_project")
+  @@index([status], map: "idx_tasks_status")
+}
+
+model users {
+  id                             Int                @id @default(autoincrement())
+  name                           String             @db.VarChar(100)
+  email                          String             @unique @db.VarChar(255)
+  password_hash                  String
+  avatar_url                     String?
+  role                           user_role?         @default(MEMBER)
+  status                         user_status?       @default(ACTIVE)
+  created_at                     DateTime?          @default(now()) @db.Timestamp(6)
+  updated_at                     DateTime?          @default(now()) @db.Timestamp(6)
+  activity_logs                  activity_logs[]
+  ai_histories                   ai_histories[]
+  project_members                project_members[]
+  projects                       projects[]
+  task_attachments               task_attachments[]
+  task_comments                  task_comments[]
+  tasks_tasks_assignee_idTousers tasks[]            @relation("tasks_assignee_idTousers")
+  tasks_tasks_creator_idTousers  tasks[]            @relation("tasks_creator_idTousers")
+}
+
+enum ai_action_type {
+  GENERATE_SUBTASKS
+  SUMMARIZE_TASK
+  SUGGEST_PRIORITY
+  SUGGEST_DEADLINE
+}
+
+enum project_status {
+  ACTIVE
+  ARCHIVED
+}
+
+enum task_priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum task_status {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+  CANCELLED
+}
+
+enum user_role {
+  ADMIN
+  MEMBER
+}
+
+enum user_status {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+}
