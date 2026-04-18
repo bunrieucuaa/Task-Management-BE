@@ -1304,6 +1304,9 @@ export const UsersScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password_hash: 'password_hash',
+  password_salt: 'password_salt',
+  token_version: 'token_version',
+  must_change_password: 'must_change_password',
   avatar_url: 'avatar_url',
   role: 'role',
   status: 'status',
@@ -1470,6 +1473,13 @@ export type Enumtask_priorityFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'task_priority[]'
  */
 export type ListEnumtask_priorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'task_priority[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

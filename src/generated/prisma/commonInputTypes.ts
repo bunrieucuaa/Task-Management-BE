@@ -283,6 +283,11 @@ export type Enumtask_priorityNullableWithAggregatesFilter<$PrismaModel = never> 
   _max?: Prisma.NestedEnumtask_priorityNullableFilter<$PrismaModel>
 }
 
+export type BoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
 export type Enumuser_roleNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.user_role | Prisma.Enumuser_roleFieldRefInput<$PrismaModel> | null
   in?: $Enums.user_role[] | Prisma.ListEnumuser_roleFieldRefInput<$PrismaModel> | null
@@ -295,6 +300,14 @@ export type Enumuser_statusNullableFilter<$PrismaModel = never> = {
   in?: $Enums.user_status[] | Prisma.ListEnumuser_statusFieldRefInput<$PrismaModel> | null
   notIn?: $Enums.user_status[] | Prisma.ListEnumuser_statusFieldRefInput<$PrismaModel> | null
   not?: Prisma.NestedEnumuser_statusNullableFilter<$PrismaModel> | $Enums.user_status | null
+}
+
+export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
 export type Enumuser_roleNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -572,6 +585,11 @@ export type NestedEnumtask_priorityNullableWithAggregatesFilter<$PrismaModel = n
   _max?: Prisma.NestedEnumtask_priorityNullableFilter<$PrismaModel>
 }
 
+export type NestedBoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
 export type NestedEnumuser_roleNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.user_role | Prisma.Enumuser_roleFieldRefInput<$PrismaModel> | null
   in?: $Enums.user_role[] | Prisma.ListEnumuser_roleFieldRefInput<$PrismaModel> | null
@@ -584,6 +602,14 @@ export type NestedEnumuser_statusNullableFilter<$PrismaModel = never> = {
   in?: $Enums.user_status[] | Prisma.ListEnumuser_statusFieldRefInput<$PrismaModel> | null
   notIn?: $Enums.user_status[] | Prisma.ListEnumuser_statusFieldRefInput<$PrismaModel> | null
   not?: Prisma.NestedEnumuser_statusNullableFilter<$PrismaModel> | $Enums.user_status | null
+}
+
+export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
 export type NestedEnumuser_roleNullableWithAggregatesFilter<$PrismaModel = never> = {

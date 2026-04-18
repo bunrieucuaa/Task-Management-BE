@@ -125,12 +125,15 @@ model users {
   id                             Int                @id @default(autoincrement())
   name                           String             @db.VarChar(100)
   email                          String             @unique @db.VarChar(255)
-  password_hash                  String
+  password_hash                  String             @map("password_hash")
+  password_salt                  String             @map("password_salt")
+  token_version                  Int                @default(0)
+  must_change_password           Boolean            @default(true)
   avatar_url                     String?
   role                           user_role?         @default(MEMBER)
   status                         user_status?       @default(ACTIVE)
   created_at                     DateTime?          @default(now()) @db.Timestamp(6)
-  updated_at                     DateTime?          @default(now()) @db.Timestamp(6)
+  updated_at                     DateTime?          @updatedAt @db.Timestamp(6)
   activity_logs                  activity_logs[]
   ai_histories                   ai_histories[]
   project_members                project_members[]
@@ -139,6 +142,11 @@ model users {
   task_comments                  task_comments[]
   tasks_tasks_assignee_idTousers tasks[]            @relation("tasks_assignee_idTousers")
   tasks_tasks_creator_idTousers  tasks[]            @relation("tasks_creator_idTousers")
+
+  @@index([status])
+  @@index([role])
+  @@index([status, role])
+  @@index([created_at])
 }
 
 enum ai_action_type {

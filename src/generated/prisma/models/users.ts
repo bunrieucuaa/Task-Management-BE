@@ -28,10 +28,12 @@ export type AggregateUsers = {
 
 export type UsersAvgAggregateOutputType = {
   id: number | null
+  token_version: number | null
 }
 
 export type UsersSumAggregateOutputType = {
   id: number | null
+  token_version: number | null
 }
 
 export type UsersMinAggregateOutputType = {
@@ -39,6 +41,9 @@ export type UsersMinAggregateOutputType = {
   name: string | null
   email: string | null
   password_hash: string | null
+  password_salt: string | null
+  token_version: number | null
+  must_change_password: boolean | null
   avatar_url: string | null
   role: $Enums.user_role | null
   status: $Enums.user_status | null
@@ -51,6 +56,9 @@ export type UsersMaxAggregateOutputType = {
   name: string | null
   email: string | null
   password_hash: string | null
+  password_salt: string | null
+  token_version: number | null
+  must_change_password: boolean | null
   avatar_url: string | null
   role: $Enums.user_role | null
   status: $Enums.user_status | null
@@ -63,6 +71,9 @@ export type UsersCountAggregateOutputType = {
   name: number
   email: number
   password_hash: number
+  password_salt: number
+  token_version: number
+  must_change_password: number
   avatar_url: number
   role: number
   status: number
@@ -74,10 +85,12 @@ export type UsersCountAggregateOutputType = {
 
 export type UsersAvgAggregateInputType = {
   id?: true
+  token_version?: true
 }
 
 export type UsersSumAggregateInputType = {
   id?: true
+  token_version?: true
 }
 
 export type UsersMinAggregateInputType = {
@@ -85,6 +98,9 @@ export type UsersMinAggregateInputType = {
   name?: true
   email?: true
   password_hash?: true
+  password_salt?: true
+  token_version?: true
+  must_change_password?: true
   avatar_url?: true
   role?: true
   status?: true
@@ -97,6 +113,9 @@ export type UsersMaxAggregateInputType = {
   name?: true
   email?: true
   password_hash?: true
+  password_salt?: true
+  token_version?: true
+  must_change_password?: true
   avatar_url?: true
   role?: true
   status?: true
@@ -109,6 +128,9 @@ export type UsersCountAggregateInputType = {
   name?: true
   email?: true
   password_hash?: true
+  password_salt?: true
+  token_version?: true
+  must_change_password?: true
   avatar_url?: true
   role?: true
   status?: true
@@ -208,6 +230,9 @@ export type UsersGroupByOutputType = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version: number
+  must_change_password: boolean
   avatar_url: string | null
   role: $Enums.user_role | null
   status: $Enums.user_status | null
@@ -243,6 +268,9 @@ export type usersWhereInput = {
   name?: Prisma.StringFilter<"users"> | string
   email?: Prisma.StringFilter<"users"> | string
   password_hash?: Prisma.StringFilter<"users"> | string
+  password_salt?: Prisma.StringFilter<"users"> | string
+  token_version?: Prisma.IntFilter<"users"> | number
+  must_change_password?: Prisma.BoolFilter<"users"> | boolean
   avatar_url?: Prisma.StringNullableFilter<"users"> | string | null
   role?: Prisma.Enumuser_roleNullableFilter<"users"> | $Enums.user_role | null
   status?: Prisma.Enumuser_statusNullableFilter<"users"> | $Enums.user_status | null
@@ -263,6 +291,9 @@ export type usersOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
+  password_salt?: Prisma.SortOrder
+  token_version?: Prisma.SortOrder
+  must_change_password?: Prisma.SortOrder
   avatar_url?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -286,6 +317,9 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.usersWhereInput | Prisma.usersWhereInput[]
   name?: Prisma.StringFilter<"users"> | string
   password_hash?: Prisma.StringFilter<"users"> | string
+  password_salt?: Prisma.StringFilter<"users"> | string
+  token_version?: Prisma.IntFilter<"users"> | number
+  must_change_password?: Prisma.BoolFilter<"users"> | boolean
   avatar_url?: Prisma.StringNullableFilter<"users"> | string | null
   role?: Prisma.Enumuser_roleNullableFilter<"users"> | $Enums.user_role | null
   status?: Prisma.Enumuser_statusNullableFilter<"users"> | $Enums.user_status | null
@@ -306,6 +340,9 @@ export type usersOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
+  password_salt?: Prisma.SortOrder
+  token_version?: Prisma.SortOrder
+  must_change_password?: Prisma.SortOrder
   avatar_url?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -326,6 +363,9 @@ export type usersScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"users"> | string
   email?: Prisma.StringWithAggregatesFilter<"users"> | string
   password_hash?: Prisma.StringWithAggregatesFilter<"users"> | string
+  password_salt?: Prisma.StringWithAggregatesFilter<"users"> | string
+  token_version?: Prisma.IntWithAggregatesFilter<"users"> | number
+  must_change_password?: Prisma.BoolWithAggregatesFilter<"users"> | boolean
   avatar_url?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   role?: Prisma.Enumuser_roleNullableWithAggregatesFilter<"users"> | $Enums.user_role | null
   status?: Prisma.Enumuser_statusNullableWithAggregatesFilter<"users"> | $Enums.user_status | null
@@ -337,6 +377,9 @@ export type usersCreateInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -357,6 +400,9 @@ export type usersUncheckedCreateInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -376,6 +422,9 @@ export type usersUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -396,6 +445,9 @@ export type usersUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -416,6 +468,9 @@ export type usersCreateManyInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -427,6 +482,9 @@ export type usersUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -439,6 +497,9 @@ export type usersUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -456,6 +517,9 @@ export type usersCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
+  password_salt?: Prisma.SortOrder
+  token_version?: Prisma.SortOrder
+  must_change_password?: Prisma.SortOrder
   avatar_url?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -465,6 +529,7 @@ export type usersCountOrderByAggregateInput = {
 
 export type usersAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  token_version?: Prisma.SortOrder
 }
 
 export type usersMaxOrderByAggregateInput = {
@@ -472,6 +537,9 @@ export type usersMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
+  password_salt?: Prisma.SortOrder
+  token_version?: Prisma.SortOrder
+  must_change_password?: Prisma.SortOrder
   avatar_url?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -484,6 +552,9 @@ export type usersMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password_hash?: Prisma.SortOrder
+  password_salt?: Prisma.SortOrder
+  token_version?: Prisma.SortOrder
+  must_change_password?: Prisma.SortOrder
   avatar_url?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -493,6 +564,7 @@ export type usersMinOrderByAggregateInput = {
 
 export type usersSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  token_version?: Prisma.SortOrder
 }
 
 export type usersCreateNestedOneWithoutActivity_logsInput = {
@@ -623,6 +695,10 @@ export type usersUpdateOneWithoutTasks_tasks_creator_idTousersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutTasks_tasks_creator_idTousersInput, Prisma.usersUpdateWithoutTasks_tasks_creator_idTousersInput>, Prisma.usersUncheckedUpdateWithoutTasks_tasks_creator_idTousersInput>
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type NullableEnumuser_roleFieldUpdateOperationsInput = {
   set?: $Enums.user_role | null
 }
@@ -635,6 +711,9 @@ export type usersCreateWithoutActivity_logsInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -654,6 +733,9 @@ export type usersUncheckedCreateWithoutActivity_logsInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -688,6 +770,9 @@ export type usersUpdateWithoutActivity_logsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -707,6 +792,9 @@ export type usersUncheckedUpdateWithoutActivity_logsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -725,6 +813,9 @@ export type usersCreateWithoutAi_historiesInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -744,6 +835,9 @@ export type usersUncheckedCreateWithoutAi_historiesInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -778,6 +872,9 @@ export type usersUpdateWithoutAi_historiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -797,6 +894,9 @@ export type usersUncheckedUpdateWithoutAi_historiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -815,6 +915,9 @@ export type usersCreateWithoutProject_membersInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -834,6 +937,9 @@ export type usersUncheckedCreateWithoutProject_membersInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -868,6 +974,9 @@ export type usersUpdateWithoutProject_membersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -887,6 +996,9 @@ export type usersUncheckedUpdateWithoutProject_membersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -905,6 +1017,9 @@ export type usersCreateWithoutProjectsInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -924,6 +1039,9 @@ export type usersUncheckedCreateWithoutProjectsInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -958,6 +1076,9 @@ export type usersUpdateWithoutProjectsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -977,6 +1098,9 @@ export type usersUncheckedUpdateWithoutProjectsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -995,6 +1119,9 @@ export type usersCreateWithoutTask_attachmentsInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -1014,6 +1141,9 @@ export type usersUncheckedCreateWithoutTask_attachmentsInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -1048,6 +1178,9 @@ export type usersUpdateWithoutTask_attachmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -1067,6 +1200,9 @@ export type usersUncheckedUpdateWithoutTask_attachmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -1085,6 +1221,9 @@ export type usersCreateWithoutTask_commentsInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -1104,6 +1243,9 @@ export type usersUncheckedCreateWithoutTask_commentsInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -1138,6 +1280,9 @@ export type usersUpdateWithoutTask_commentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -1157,6 +1302,9 @@ export type usersUncheckedUpdateWithoutTask_commentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -1175,6 +1323,9 @@ export type usersCreateWithoutTasks_tasks_assignee_idTousersInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -1194,6 +1345,9 @@ export type usersUncheckedCreateWithoutTasks_tasks_assignee_idTousersInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -1217,6 +1371,9 @@ export type usersCreateWithoutTasks_tasks_creator_idTousersInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -1236,6 +1393,9 @@ export type usersUncheckedCreateWithoutTasks_tasks_creator_idTousersInput = {
   name: string
   email: string
   password_hash: string
+  password_salt: string
+  token_version?: number
+  must_change_password?: boolean
   avatar_url?: string | null
   role?: $Enums.user_role | null
   status?: $Enums.user_status | null
@@ -1270,6 +1430,9 @@ export type usersUpdateWithoutTasks_tasks_assignee_idTousersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -1289,6 +1452,9 @@ export type usersUncheckedUpdateWithoutTasks_tasks_assignee_idTousersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -1318,6 +1484,9 @@ export type usersUpdateWithoutTasks_tasks_creator_idTousersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -1337,6 +1506,9 @@ export type usersUncheckedUpdateWithoutTasks_tasks_creator_idTousersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  password_salt?: Prisma.StringFieldUpdateOperationsInput | string
+  token_version?: Prisma.IntFieldUpdateOperationsInput | number
+  must_change_password?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
   status?: Prisma.NullableEnumuser_statusFieldUpdateOperationsInput | $Enums.user_status | null
@@ -1450,6 +1622,9 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name?: boolean
   email?: boolean
   password_hash?: boolean
+  password_salt?: boolean
+  token_version?: boolean
+  must_change_password?: boolean
   avatar_url?: boolean
   role?: boolean
   status?: boolean
@@ -1471,6 +1646,9 @@ export type usersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   email?: boolean
   password_hash?: boolean
+  password_salt?: boolean
+  token_version?: boolean
+  must_change_password?: boolean
   avatar_url?: boolean
   role?: boolean
   status?: boolean
@@ -1483,6 +1661,9 @@ export type usersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   email?: boolean
   password_hash?: boolean
+  password_salt?: boolean
+  token_version?: boolean
+  must_change_password?: boolean
   avatar_url?: boolean
   role?: boolean
   status?: boolean
@@ -1495,6 +1676,9 @@ export type usersSelectScalar = {
   name?: boolean
   email?: boolean
   password_hash?: boolean
+  password_salt?: boolean
+  token_version?: boolean
+  must_change_password?: boolean
   avatar_url?: boolean
   role?: boolean
   status?: boolean
@@ -1502,7 +1686,7 @@ export type usersSelectScalar = {
   updated_at?: boolean
 }
 
-export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password_hash" | "avatar_url" | "role" | "status" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
+export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password_hash" | "password_salt" | "token_version" | "must_change_password" | "avatar_url" | "role" | "status" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   activity_logs?: boolean | Prisma.users$activity_logsArgs<ExtArgs>
   ai_histories?: boolean | Prisma.users$ai_historiesArgs<ExtArgs>
@@ -1534,6 +1718,9 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     name: string
     email: string
     password_hash: string
+    password_salt: string
+    token_version: number
+    must_change_password: boolean
     avatar_url: string | null
     role: $Enums.user_role | null
     status: $Enums.user_status | null
@@ -1974,6 +2161,9 @@ export interface usersFieldRefs {
   readonly name: Prisma.FieldRef<"users", 'String'>
   readonly email: Prisma.FieldRef<"users", 'String'>
   readonly password_hash: Prisma.FieldRef<"users", 'String'>
+  readonly password_salt: Prisma.FieldRef<"users", 'String'>
+  readonly token_version: Prisma.FieldRef<"users", 'Int'>
+  readonly must_change_password: Prisma.FieldRef<"users", 'Boolean'>
   readonly avatar_url: Prisma.FieldRef<"users", 'String'>
   readonly role: Prisma.FieldRef<"users", 'user_role'>
   readonly status: Prisma.FieldRef<"users", 'user_status'>
