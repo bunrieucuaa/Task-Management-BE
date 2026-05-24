@@ -1,8 +1,7 @@
 import { prisma } from "@/config/prisma";
 import {
-
-  user_role,
-  user_status,
+  UserRole,
+  UserStatus,
 } from "@/generated/prisma/client.js";
 import { generateSalt, hashPassword } from "../utils/password.util.js";
 
@@ -12,7 +11,7 @@ async function seedAdminUser() {
   const email = "admin@system.local";
   const defaultPassword = "Admin@123456";
 
-  const existingAdmin = await prisma.users.findUnique({ where: { email } });
+  const existingAdmin = await prisma.user.findUnique({ where: { email } });
   if (existingAdmin){
     console.log('⏭️  Admin user already exists. Skipping.');
     return existingAdmin;
@@ -22,21 +21,22 @@ async function seedAdminUser() {
   const salt = generateSalt();
   const hashedPassword = await hashPassword(defaultPassword, salt);
 
-  const adminUser = await prisma.users.create({
+  const adminUser = await prisma.user.create({
     data: {
       name: "Admin",
       email,
-      password_hash: hashedPassword,
-      role: user_role.ADMIN,
-      status: user_status.ACTIVE,
-      must_change_password: true,
-      token_version: 0,
+      passwordHash: hashedPassword,
+      passwordSalt: salt,
+      role: UserRole.ADMIN,
+      status: UserStatus.ACTIVE,
+      mustChangePassword: true,
+      tokenVersion: 0,
     },
   });
 
   console.log("✅ Default admin user created successfully!");
   console.log("------------------------------------------");
-  console.log("Username: admin");
+  console.log("Email: admin@system.local");
   console.log("Password: Admin@123456");
   console.log("------------------------------------------");
   console.log("⚠️  IMPORTANT: Change the password after first login!");

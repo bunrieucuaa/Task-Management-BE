@@ -5,13 +5,27 @@
     "description": "Collection for task-be backend. Update this file when APIs change, then re-import to Postman.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8082"
+      "value": "http://localhost:8080"
     },
     {
       "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
       "value": ""
     }
   ],
@@ -22,52 +36,37 @@
         {
           "name": "Health",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/health",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "health"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "health"]
             }
           }
         }
       ]
     },
     {
-      "name": "Auth (planned)",
-      "description": "These endpoints are planned; update paths/body when you implement auth routes.",
+      "name": "Auth",
       "item": [
         {
-          "name": "Login (username + password)",
+          "name": "Login (email + password)",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"Admin@123456\"\n}"
+              "raw": "{\n  \"email\": \"admin@system.local\",\n  \"password\": \"Admin@123456\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
             }
           },
           "event": [
@@ -78,7 +77,42 @@
                 "exec": [
                   "try {",
                   "  const json = pm.response.json();",
-                  "  const token = json?.accessToken ?? json?.data?.accessToken;",
+                  "  const data = json?.data ?? {};",
+                  "  if (data.accessToken) pm.collectionVariables.set('accessToken', data.accessToken);",
+                  "  if (data.refreshToken) pm.collectionVariables.set('refreshToken', data.refreshToken);",
+                  "} catch (e) {}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh access token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  const json = pm.response.json();",
+                  "  const token = json?.data?.accessToken;",
                   "  if (token) pm.collectionVariables.set('accessToken', token);",
                   "} catch (e) {}"
                 ]
@@ -87,24 +121,23 @@
           ]
         },
         {
+          "name": "Get me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          }
+        },
+        {
           "name": "Change password",
           "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{accessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
@@ -112,20 +145,56 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth/change-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth",
-                "change-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "change-password"]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('accessToken', '');",
+                  "    pm.collectionVariables.set('refreshToken', '');",
+                  "  }",
+                  "} catch (e) {}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "try {",
+                  "  if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('accessToken', '');",
+                  "    pm.collectionVariables.set('refreshToken', '');",
+                  "  }",
+                  "} catch (e) {}"
+                ]
+              }
+            }
+          ]
         }
       ]
     }
   ]
 }
-

@@ -51,16 +51,16 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  activity_logs: 'activity_logs',
-  ai_histories: 'ai_histories',
-  project_members: 'project_members',
-  projects: 'projects',
-  tags: 'tags',
-  task_attachments: 'task_attachments',
-  task_comments: 'task_comments',
-  task_tags: 'task_tags',
-  tasks: 'tasks',
-  users: 'users'
+  ActivityLog: 'ActivityLog',
+  AiHistory: 'AiHistory',
+  ProjectMember: 'ProjectMember',
+  Project: 'Project',
+  Tag: 'Tag',
+  TaskAttachment: 'TaskAttachment',
+  TaskComment: 'TaskComment',
+  TaskTag: 'TaskTag',
+  Task: 'Task',
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -79,129 +79,129 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const Activity_logsScalarFieldEnum = {
+export const ActivityLogScalarFieldEnum = {
   id: 'id',
-  task_id: 'task_id',
-  user_id: 'user_id',
+  taskId: 'taskId',
+  userId: 'userId',
   action: 'action',
-  old_value: 'old_value',
-  new_value: 'new_value',
-  created_at: 'created_at'
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  createdAt: 'createdAt'
 } as const
 
-export type Activity_logsScalarFieldEnum = (typeof Activity_logsScalarFieldEnum)[keyof typeof Activity_logsScalarFieldEnum]
+export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
 
 
-export const Ai_historiesScalarFieldEnum = {
+export const AiHistoryScalarFieldEnum = {
   id: 'id',
-  task_id: 'task_id',
-  user_id: 'user_id',
-  action_type: 'action_type',
+  taskId: 'taskId',
+  userId: 'userId',
+  actionType: 'actionType',
   prompt: 'prompt',
   response: 'response',
-  created_at: 'created_at'
+  createdAt: 'createdAt'
 } as const
 
-export type Ai_historiesScalarFieldEnum = (typeof Ai_historiesScalarFieldEnum)[keyof typeof Ai_historiesScalarFieldEnum]
+export type AiHistoryScalarFieldEnum = (typeof AiHistoryScalarFieldEnum)[keyof typeof AiHistoryScalarFieldEnum]
 
 
-export const Project_membersScalarFieldEnum = {
+export const ProjectMemberScalarFieldEnum = {
   id: 'id',
-  project_id: 'project_id',
-  user_id: 'user_id',
+  projectId: 'projectId',
+  userId: 'userId',
   role: 'role',
-  joined_at: 'joined_at'
+  joinedAt: 'joinedAt'
 } as const
 
-export type Project_membersScalarFieldEnum = (typeof Project_membersScalarFieldEnum)[keyof typeof Project_membersScalarFieldEnum]
+export type ProjectMemberScalarFieldEnum = (typeof ProjectMemberScalarFieldEnum)[keyof typeof ProjectMemberScalarFieldEnum]
 
 
-export const ProjectsScalarFieldEnum = {
+export const ProjectScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  owner_id: 'owner_id',
+  ownerId: 'ownerId',
   status: 'status',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type ProjectsScalarFieldEnum = (typeof ProjectsScalarFieldEnum)[keyof typeof ProjectsScalarFieldEnum]
+export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
-export const TagsScalarFieldEnum = {
+export const TagScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  created_at: 'created_at'
+  createdAt: 'createdAt'
 } as const
 
-export type TagsScalarFieldEnum = (typeof TagsScalarFieldEnum)[keyof typeof TagsScalarFieldEnum]
+export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
 
 
-export const Task_attachmentsScalarFieldEnum = {
+export const TaskAttachmentScalarFieldEnum = {
   id: 'id',
-  task_id: 'task_id',
-  file_url: 'file_url',
-  uploaded_by: 'uploaded_by',
-  created_at: 'created_at'
+  taskId: 'taskId',
+  fileUrl: 'fileUrl',
+  uploadedBy: 'uploadedBy',
+  createdAt: 'createdAt'
 } as const
 
-export type Task_attachmentsScalarFieldEnum = (typeof Task_attachmentsScalarFieldEnum)[keyof typeof Task_attachmentsScalarFieldEnum]
+export type TaskAttachmentScalarFieldEnum = (typeof TaskAttachmentScalarFieldEnum)[keyof typeof TaskAttachmentScalarFieldEnum]
 
 
-export const Task_commentsScalarFieldEnum = {
+export const TaskCommentScalarFieldEnum = {
   id: 'id',
-  task_id: 'task_id',
-  user_id: 'user_id',
+  taskId: 'taskId',
+  userId: 'userId',
   content: 'content',
-  created_at: 'created_at'
+  createdAt: 'createdAt'
 } as const
 
-export type Task_commentsScalarFieldEnum = (typeof Task_commentsScalarFieldEnum)[keyof typeof Task_commentsScalarFieldEnum]
+export type TaskCommentScalarFieldEnum = (typeof TaskCommentScalarFieldEnum)[keyof typeof TaskCommentScalarFieldEnum]
 
 
-export const Task_tagsScalarFieldEnum = {
+export const TaskTagScalarFieldEnum = {
   id: 'id',
-  task_id: 'task_id',
-  tag_id: 'tag_id'
+  taskId: 'taskId',
+  tagId: 'tagId'
 } as const
 
-export type Task_tagsScalarFieldEnum = (typeof Task_tagsScalarFieldEnum)[keyof typeof Task_tagsScalarFieldEnum]
+export type TaskTagScalarFieldEnum = (typeof TaskTagScalarFieldEnum)[keyof typeof TaskTagScalarFieldEnum]
 
 
-export const TasksScalarFieldEnum = {
+export const TaskScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
-  project_id: 'project_id',
-  creator_id: 'creator_id',
-  assignee_id: 'assignee_id',
+  projectId: 'projectId',
+  creatorId: 'creatorId',
+  assigneeId: 'assigneeId',
   status: 'status',
   priority: 'priority',
   deadline: 'deadline',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type TasksScalarFieldEnum = (typeof TasksScalarFieldEnum)[keyof typeof TasksScalarFieldEnum]
+export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
 
 
-export const UsersScalarFieldEnum = {
+export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  password_hash: 'password_hash',
-  password_salt: 'password_salt',
-  token_version: 'token_version',
-  must_change_password: 'must_change_password',
-  avatar_url: 'avatar_url',
+  passwordHash: 'passwordHash',
+  passwordSalt: 'passwordSalt',
+  tokenVersion: 'tokenVersion',
+  mustChangePassword: 'mustChangePassword',
+  avatarUrl: 'avatarUrl',
   role: 'role',
   status: 'status',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const SortOrder = {

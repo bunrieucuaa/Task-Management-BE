@@ -31,8 +31,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Activity_logs
- * const activity_logs = await prisma.activity_logs.findMany()
+ * // Fetch zero or more ActivityLogs
+ * const activityLogs = await prisma.activityLog.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,52 +42,52 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model activity_logs
+ * Model ActivityLog
  * 
  */
-export type activity_logs = Prisma.activity_logsModel
+export type ActivityLog = Prisma.ActivityLogModel
 /**
- * Model ai_histories
+ * Model AiHistory
  * 
  */
-export type ai_histories = Prisma.ai_historiesModel
+export type AiHistory = Prisma.AiHistoryModel
 /**
- * Model project_members
+ * Model ProjectMember
  * 
  */
-export type project_members = Prisma.project_membersModel
+export type ProjectMember = Prisma.ProjectMemberModel
 /**
- * Model projects
+ * Model Project
  * 
  */
-export type projects = Prisma.projectsModel
+export type Project = Prisma.ProjectModel
 /**
- * Model tags
+ * Model Tag
  * 
  */
-export type tags = Prisma.tagsModel
+export type Tag = Prisma.TagModel
 /**
- * Model task_attachments
+ * Model TaskAttachment
  * 
  */
-export type task_attachments = Prisma.task_attachmentsModel
+export type TaskAttachment = Prisma.TaskAttachmentModel
 /**
- * Model task_comments
+ * Model TaskComment
  * 
  */
-export type task_comments = Prisma.task_commentsModel
+export type TaskComment = Prisma.TaskCommentModel
 /**
- * Model task_tags
+ * Model TaskTag
  * 
  */
-export type task_tags = Prisma.task_tagsModel
+export type TaskTag = Prisma.TaskTagModel
 /**
- * Model tasks
+ * Model Task
  * 
  */
-export type tasks = Prisma.tasksModel
+export type Task = Prisma.TaskModel
 /**
- * Model users
+ * Model User
  * 
  */
-export type users = Prisma.usersModel
+export type User = Prisma.UserModel

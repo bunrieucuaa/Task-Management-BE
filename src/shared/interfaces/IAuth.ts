@@ -1,11 +1,16 @@
-import type { user_role as Role } from "../../generated/prisma/client";
+import type { UserRole } from "../../generated/prisma/client";
 
 export interface ILoginResponseData {
   user: {
     id: string;
     email: string;
-    role: Role;
+    role: UserRole;
   };
   accessToken: string;
+  refreshToken: string;
   mustChangePassword?: boolean;
+}
+
+export interface IRefreshTokenResponseData {
+  accessToken: string;
 }

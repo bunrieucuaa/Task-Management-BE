@@ -9,35 +9,35 @@
 * 🟢 You can import this file directly.
 */
 
-export const ai_action_type = {
+export const AiActionType = {
   GENERATE_SUBTASKS: 'GENERATE_SUBTASKS',
   SUMMARIZE_TASK: 'SUMMARIZE_TASK',
   SUGGEST_PRIORITY: 'SUGGEST_PRIORITY',
   SUGGEST_DEADLINE: 'SUGGEST_DEADLINE'
 } as const
 
-export type ai_action_type = (typeof ai_action_type)[keyof typeof ai_action_type]
+export type AiActionType = (typeof AiActionType)[keyof typeof AiActionType]
 
 
-export const project_status = {
+export const ProjectStatus = {
   ACTIVE: 'ACTIVE',
   ARCHIVED: 'ARCHIVED'
 } as const
 
-export type project_status = (typeof project_status)[keyof typeof project_status]
+export type ProjectStatus = (typeof ProjectStatus)[keyof typeof ProjectStatus]
 
 
-export const task_priority = {
+export const TaskPriority = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',
   HIGH: 'HIGH',
   URGENT: 'URGENT'
 } as const
 
-export type task_priority = (typeof task_priority)[keyof typeof task_priority]
+export type TaskPriority = (typeof TaskPriority)[keyof typeof TaskPriority]
 
 
-export const task_status = {
+export const TaskStatus = {
   TODO: 'TODO',
   IN_PROGRESS: 'IN_PROGRESS',
   REVIEW: 'REVIEW',
@@ -45,21 +45,21 @@ export const task_status = {
   CANCELLED: 'CANCELLED'
 } as const
 
-export type task_status = (typeof task_status)[keyof typeof task_status]
+export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
 
 
-export const user_role = {
+export const UserRole = {
   ADMIN: 'ADMIN',
   MEMBER: 'MEMBER'
 } as const
 
-export type user_role = (typeof user_role)[keyof typeof user_role]
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
-export const user_status = {
+export const UserStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
   BLOCKED: 'BLOCKED'
 } as const
 
-export type user_status = (typeof user_status)[keyof typeof user_status]
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
