@@ -118,6 +118,9 @@ export const authenticate = async (
       email: user.email,
       role: user.role,
       tokenVersion: user.tokenVersion,
+      name: user.name,
+      avatarUrl: user.avatarUrl ?? "",
+      status: user.status ?? "ACTIVE"
     };
 
     next();

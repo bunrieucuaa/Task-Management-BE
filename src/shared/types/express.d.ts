@@ -1,4 +1,4 @@
-import type { UserRole } from '@/generated/prisma/enums';
+import type { UserRole, UserStatus } from '@/generated/prisma/enums';
 
 declare global {
   namespace Express {
@@ -8,6 +8,9 @@ declare global {
         email: string;
         role: UserRole | null;
         tokenVersion: number;
+        name: string,
+        avatarUrl? :string | "",
+        status: UserStatus,
       };
     }
   }

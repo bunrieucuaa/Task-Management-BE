@@ -48,6 +48,9 @@ export const login = async (
     email: user.email,
     role: user.role,
     tokenVersion: user.tokenVersion,
+    name: user.name,
+    avatarUrl: user.avatarUrl,
+    status: user.status,
   };
 
   const accessToken = signAccessToken(tokenPayload);

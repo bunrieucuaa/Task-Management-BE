@@ -34,9 +34,8 @@ export const loginHandler = async (req: Request, res: Response): Promise<void> =
     const { email, password } = validation.data;
     const result = await login(email, password);
 
-    const httpStatus =
-      result.code === 200 ? 200 : getHttpStatus(RESPONSE_CODES.MUST_CHANGE_PASSWORD);
-    res.status(httpStatus).json(result);
+    // Luôn trả 200 khi login thành công — mustChangePassword được xử lý ở FE qua response body
+    res.status(200).json(result);
   } catch (error) {
     const errorResponse = createErrorResponse(
       RESPONSE_CODES.INVALID_CREDENTIALS,
