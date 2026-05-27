@@ -56,8 +56,11 @@ export const login = async (
   const responseData: ILoginResponseData = {
     user: {
       id: String(user.id),
+      name: user.name,
       email: user.email,
       role: user.role,
+      avatarUrl: user.avatarUrl ?? "",
+      status: user.status ?? "ACTIVE",
     },
     accessToken,
     refreshToken,

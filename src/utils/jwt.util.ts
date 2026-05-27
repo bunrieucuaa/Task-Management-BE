@@ -44,10 +44,10 @@ export const verifyToken = (token: string): JwtPayload => {
     return decoded;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      throw new Error('Token has expired');
+      throw new Error('Token đã hết hạn');
     }
     if (error instanceof jwt.JsonWebTokenError) {
-      throw new Error('Invalid token');
+      throw new Error('Token không hợp lệ');
     }
     throw new Error('Token verification failed');
   }

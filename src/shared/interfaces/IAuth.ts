@@ -1,10 +1,13 @@
-import type { UserRole } from "../../generated/prisma/client";
+import type { UserRole, UserStatus } from "../../generated/prisma/client";
 
 export interface ILoginResponseData {
   user: {
     id: string;
+    name: string;
     email: string;
     role: UserRole;
+    avatarUrl: string;
+    status: UserStatus
   };
   accessToken: string;
   refreshToken: string;
