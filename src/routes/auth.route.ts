@@ -6,7 +6,8 @@ import {
   logoutHandler,
   refreshHandler,
 } from '../controllers/auth.controller';
-import { authenticate } from '../middlewares/auth.middleware';
+import { authenticate, authorize } from '../middlewares/auth.middleware';
+import { UserRole } from '@/generated/prisma/enums';
 
 const router = Router();
 
@@ -17,6 +18,6 @@ router.post('/refresh', refreshHandler);
 // Protected routes
 router.post('/change-password', authenticate, changePasswordHandler);
 router.post('/logout', authenticate, logoutHandler);
-router.get('/me', authenticate, getMeHandler);
+router.get('/me', authenticate, authorize(UserRole.ADMIN, UserRole.MEMBER), getMeHandler);
 
 export default router;

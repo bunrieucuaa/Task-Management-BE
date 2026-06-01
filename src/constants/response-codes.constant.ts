@@ -13,6 +13,7 @@ interface ResponseCodeConfig {
 export const RESPONSE_CODES = {
   // Success
   SUCCESS: 'SUCCESS',
+  CREATED: 'CREATED',
 
   // Validation Errors (4001-4009)
   VALIDATION_ERROR: 'VALIDATION_ERROR',
@@ -56,6 +57,12 @@ export const ResponseCodeConfig: Record<ResponseCodeKey, ResponseCodeConfig> = {
     code: 200,
     httpStatus: 200,
     message: 'Request completed successfully',
+  },
+
+  CREATED: {
+    code: 201,
+    httpStatus: 201,
+    message: 'Created completed successfully',
   },
 
   // Validation Errors

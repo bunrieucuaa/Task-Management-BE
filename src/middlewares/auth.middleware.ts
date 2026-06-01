@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { getUserById } from '../services/user.service';
-import { UserStatus } from '@/generated/prisma/client';
+import { UserRole, UserStatus } from '@/generated/prisma/client';
 import { verifyToken } from '@/utils/jwt.util';
 import { TokenType } from '@/shared/interfaces/IJwt';
 import jwt from 'jsonwebtoken';
+import { RESPONSE_CODES, ResponseCodeConfig } from '@/constants/response-codes.constant';
 
 
 /**
@@ -133,3 +134,30 @@ export const authenticate = async (
     });
   }
 };
+
+
+export const authorize = (...roles: UserRole[]) => (
+  req: Request,
+  res: Response,
+  next: NextFunction): void =>
+{
+  if (!req.user) {
+    res.status(ResponseCodeConfig[RESPONSE_CODES.USER_NOT_FOUND].httpStatus).json({
+      code: 401,
+      success: false,
+      data: null,
+      message: 'Unauthorized. User not found in request.',
+    })
+    return
+  }
+  if (!req.user.role || !roles.includes(req.user?.role)) {
+    res.status(ResponseCodeConfig[RESPONSE_CODES.FORBIDDEN].httpStatus).json({
+      code: 403,
+      success: false,
+      data: null,
+      message: 'Forbidden. You do not have the required permissions.'
+    });
+    return;
+  }
+  next();
+}

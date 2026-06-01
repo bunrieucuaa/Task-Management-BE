@@ -3,7 +3,7 @@ import { TokenType, type JwtPayload } from '@/shared/interfaces/IJwt';
 import type { UserRole } from '@/generated/prisma/enums';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'change-this-secret-in-production';
-const ACCESS_EXPIRES_IN_SECONDS = 15 * 60; // 15 minutes in seconds
+const ACCESS_EXPIRES_IN_SECONDS = 60 * 60; // 15 minutes in seconds
 const REFRESH_EXPIRES_IN_SECONDS = 7 * 24 * 60 * 60; // 7 days in seconds
 
 interface SignTokenPayload {
