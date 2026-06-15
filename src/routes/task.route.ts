@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/auth.middleware';
 import * as taskController from '../controllers/task.controller';
+import commentRoutes from './comment.route';
 
 const router = Router();
 
@@ -13,5 +14,8 @@ router.get('/', taskController.listTasksHandler);
 router.get('/:id', taskController.getTaskHandler);
 router.patch('/:id', taskController.updateTaskHandler);
 router.delete('/:id', taskController.deleteTaskHandler);
+
+// Nested comment routes: /api/v1/tasks/:taskId/comments
+router.use('/:taskId/comments', commentRoutes);
 
 export default router;

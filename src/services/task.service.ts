@@ -43,6 +43,26 @@ const assertTaskAccess = async (
   await assertProjectAccess(userId, role, task.projectId);
 };
 
+/**
+ * Load a task by id and assert the user may read it. Throws TASK_NOT_FOUND /
+ * FORBIDDEN. Exposed so sub-resources (comments, ...) can reuse the same gate.
+ */
+export const assertTaskAccessById = async (
+  userId: number,
+  role: UserRole | null,
+  taskId: number,
+): Promise<{ id: number; projectId: number | null; creatorId: number | null }> => {
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+    select: { id: true, projectId: true, creatorId: true },
+  });
+  if (!task) {
+    throw new ServiceError(RESPONSE_CODES.TASK_NOT_FOUND);
+  }
+  await assertTaskAccess(userId, role, task);
+  return task;
+};
+
 export const createTask = async (
   creatorId: number,
   role: UserRole | null,
