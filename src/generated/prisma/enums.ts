@@ -50,6 +50,7 @@ export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
 
 export const UserRole = {
   ADMIN: 'ADMIN',
+  PM: 'PM',
   MEMBER: 'MEMBER'
 } as const
 

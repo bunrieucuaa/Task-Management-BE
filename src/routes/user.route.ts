@@ -9,6 +9,10 @@ const router = Router();
 // Tất cả user routes đều yêu cầu authenticate
 router.use(authenticate);
 
+// ADMIN + PM: lightweight user directory for member/assignee pickers.
+// Declared before '/:id' so "directory" is not captured as an id.
+router.get(    '/directory',         authorize(UserRole.ADMIN, UserRole.PM), userController.listDirectoryHandler);
+
 // ADMIN only
 router.post(   '/',                  authorize(UserRole.ADMIN), userController.createUserHandler);
 router.get(    '/',                  authorize(UserRole.ADMIN), userController.listUsersHandler);

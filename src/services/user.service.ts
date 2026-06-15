@@ -53,6 +53,18 @@ export const updatePassword = async (
   });
 };
 
+/**
+ * Lightweight directory of ACTIVE users for member/assignee pickers.
+ * Exposes only non-sensitive summary fields.
+ */
+export const getDirectory = async () => {
+  return prisma.user.findMany({
+    where: { status: UserStatus.ACTIVE },
+    select: { id: true, name: true, email: true, avatarUrl: true, role: true },
+    orderBy: { name: 'asc' },
+  });
+};
+
 export const toUserResponse = (user: User): IUserResponse => {
   const { passwordHash, passwordSalt, tokenVersion, ...rest } = user;
   return rest;

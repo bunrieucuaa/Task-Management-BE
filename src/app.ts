@@ -4,12 +4,33 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import routes from '@/routes/index';
 import { errorHandler } from './middlewares/error.middleware';
+import { config } from '@/config/index';
 
 const app: Express = express();
 
+const isOriginAllowed = (origin: string | undefined): boolean => {
+  // Request không có Origin (curl, server-to-server, health check) → cho qua.
+  if (!origin) return true;
+  if (config.corsOrigins.includes(origin)) return true;
+  // Dev: Vite hay nhảy cổng (5173 → 5174 → ...), cho phép mọi localhost.
+  // Production vẫn chỉ chấp nhận origin trong CORS_ORIGIN.
+  if (
+    config.nodeEnv !== 'production' &&
+    /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)
+  ) {
+    return true;
+  }
+  return false;
+};
+
 // Middleware
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => callback(null, isOriginAllowed(origin)),
+    credentials: true,
+  }),
+);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -2,8 +2,25 @@ import { Request, Response } from 'express';
 import { RESPONSE_CODES } from "@/constants/response-codes.constant";
 import { createErrorResponse, createSuccessResponse, getHttpStatus } from "@/dtos/api-response.dto";
 import { CreateUserSchema, ListUsersQuerySchema, UpdateUserSchema, UpdateUserStatusSchema } from '@/dtos/user.dto';
-import { createUser, deleteUser, getAllUsers, getUserById, resetUserPassword, toUserResponse, updateUser, updateUserStatus } from '@/services/user.service';
+import { createUser, deleteUser, getAllUsers, getDirectory, getUserById, resetUserPassword, toUserResponse, updateUser, updateUserStatus } from '@/services/user.service';
 import { UserRole } from '@/generated/prisma/enums';
+
+/**
+ * GET /api/v1/users/directory
+ * Lightweight ACTIVE-user list for member/assignee pickers (ADMIN + PM).
+ */
+export const listDirectoryHandler = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const users = await getDirectory();
+    res.status(getHttpStatus(RESPONSE_CODES.SUCCESS)).json(createSuccessResponse({ users }));
+  } catch (error) {
+    const errorResponse = createErrorResponse(
+      RESPONSE_CODES.INTERNAL_SERVER_ERROR,
+      error instanceof Error ? error.message : 'Failed to fetch user directory',
+    );
+    res.status(getHttpStatus(RESPONSE_CODES.INTERNAL_SERVER_ERROR)).json(errorResponse);
+  }
+};
 
 /**
  * POST /api/v1/users

@@ -201,6 +201,7 @@ enum TaskStatus {
 
 enum UserRole {
   ADMIN
+  PM
   MEMBER
 
   @@map("user_role")

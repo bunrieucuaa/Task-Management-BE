@@ -31,6 +31,8 @@ export const RESPONSE_CODES = {
 
   // Not Found Errors (4041-4049)
   USER_NOT_FOUND: 'USER_NOT_FOUND',
+  PROJECT_NOT_FOUND: 'PROJECT_NOT_FOUND',
+  TASK_NOT_FOUND: 'TASK_NOT_FOUND',
 
   // Conflict Errors (4091-4099)
   USER_ALREADY_EXISTS: 'USER_ALREADY_EXISTS',
@@ -116,6 +118,16 @@ export const ResponseCodeConfig: Record<ResponseCodeKey, ResponseCodeConfig> = {
     code: 4041,
     httpStatus: 404,
     message: 'User not found',
+  },
+  PROJECT_NOT_FOUND: {
+    code: 4042,
+    httpStatus: 404,
+    message: 'Project not found',
+  },
+  TASK_NOT_FOUND: {
+    code: 4043,
+    httpStatus: 404,
+    message: 'Task not found',
   },
 
   // Conflict Errors

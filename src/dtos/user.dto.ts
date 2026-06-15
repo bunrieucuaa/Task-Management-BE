@@ -18,14 +18,17 @@ export const UpdateUserStatusSchema = z.object({
   status: z.nativeEnum(UserStatus),
 })
 
+// Helper: convert empty string to undefined (for query params)
+const emptyToUndefined = (val: unknown) => (val === '' ? undefined : val);
+
 export const ListUsersQuerySchema = z.object({
-  page:   z.coerce.number().int().min(1).default(1).optional(),
-  limit:  z.coerce.number().int().min(1).max(100).default(20).optional(),
-  search: z.string().optional(), 
-  role:   z.nativeEnum(UserRole).optional(),
-  status: z.nativeEnum(UserStatus).optional(),
-  sortBy: z.enum(['name', 'email', 'role', 'status', 'createdAt']).optional().default('createdAt'),
-  sortOrder: z.enum(['asc', 'desc']).optional().default('desc'),
+  page:      z.coerce.number().int().min(1).default(1).optional(),
+  limit:     z.coerce.number().int().min(1).max(100).default(20).optional(),
+  search:    z.preprocess(emptyToUndefined, z.string().optional()),
+  role:      z.preprocess(emptyToUndefined, z.nativeEnum(UserRole).optional()),
+  status:    z.preprocess(emptyToUndefined, z.nativeEnum(UserStatus).optional()),
+  sortBy:    z.preprocess(emptyToUndefined, z.enum(['name', 'email', 'role', 'status', 'createdAt']).optional().default('createdAt')),
+  sortOrder: z.preprocess(emptyToUndefined, z.enum(['asc', 'desc']).optional().default('desc')),
 })
 
 export type CreateUserDto = z.infer<typeof CreateUserSchema>;

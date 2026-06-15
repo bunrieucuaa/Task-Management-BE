@@ -32,6 +32,15 @@ const seedUsers: SeedUser[] = [
     mustChangePassword: false,
   },
 
+  // ===== PM (admin-equal for projects) =====
+  {
+    name: "PM User",
+    email: "pm@system.local",
+    role: UserRole.PM,
+    status: UserStatus.ACTIVE,
+    mustChangePassword: false,
+  },
+
   // ===== MEMBER - ACTIVE =====
   {
     name: "Nguyen Van A",
