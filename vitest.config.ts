@@ -1,0 +1,33 @@
+import { defineConfig } from 'vitest/config';
+import path from 'node:path';
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'node',
+    // Set BEFORE any module loads, so config/index.ts (fail-fast on a weak/missing
+    // JWT_SECRET) passes during tests. dotenv.config() does not override these.
+    env: {
+      NODE_ENV: 'test',
+      JWT_SECRET: 'test-secret-please-ignore-0123456789-abcdefghijklmnop',
+      CORS_ORIGIN: 'http://localhost:5173',
+    },
+    include: ['src/**/*.{test,spec}.ts'],
+    coverage: {
+      provider: 'v8',
+      reportsDirectory: './coverage',
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/generated/**',
+        'src/**/*.d.ts',
+        'src/seeds/**',
+        'src/server.ts',
+      ],
+    },
+  },
+});
