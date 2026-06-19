@@ -32,8 +32,8 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Run tests
-        run: npm test
+      - name: Run tests (with coverage thresholds)
+        run: npm run test:coverage
         env:
           # Vitest also sets these internally; provided here so any import-time
           # config (fail-fast on JWT_SECRET) is satisfied in CI as well.

@@ -28,6 +28,14 @@ export default defineConfig({
         'src/seeds/**',
         'src/server.ts',
       ],
+      // Regression floor (a few points below current ~83%). Raise as coverage grows;
+      // never set above the actual numbers or CI goes red. Enforced via `test:coverage`.
+      thresholds: {
+        statements: 80,
+        branches: 80,
+        functions: 82,
+        lines: 80,
+      },
     },
   },
 });

@@ -4,6 +4,11 @@
 
 ## Trạng thái hiện tại
 
+- 2026-06-19 (phiên 7): ✅ **Bật coverage threshold**. Thêm `coverage.thresholds` vào
+  `vitest.config.ts` (floor: stmts 80 / branch 80 / funcs 82 / lines 80 — dưới mức hiện tại
+  ~83% vài điểm để CI không đỏ) và đổi bước test trong CI sang `npm run test:coverage` để ngưỡng
+  thực sự gate. `test:coverage` exit 0. Coverage hiện tại: **83.23% stmts / 83.55% branch /
+  87.61% funcs / 83.23% lines**.
 - 2026-06-19 (phiên 6): ✅ **Sửa bug `verifyToken`** (TDD). `jwt.util.ts` export 2 lớp lỗi
   `TokenExpiredError`/`InvalidTokenError` (giữ message tiếng Việt); `auth.middleware.ts` check
   `instanceof TokenExpiredError` (bỏ `import jwt`) → token hết hạn nay trả đúng `401 "Token has
@@ -57,7 +62,8 @@
 - Có thể thêm DB integration test thật bằng Testcontainers/Postgres nếu muốn kiểm thử Prisma query thật.
 - ~~Sửa quirk `verifyToken` nuốt `TokenExpiredError`~~ ✅ xong (phiên 6) — token hết hạn trả đúng
   `"Token has expired"` (xem `testing.md` mục Quirk).
-- Bật coverage threshold trong `vitest.config.ts` nếu muốn ép mức cover tối thiểu.
+- ~~Bật coverage threshold trong `vitest.config.ts`~~ ✅ xong (phiên 7) — CI chạy `test:coverage`,
+  floor 80/80/82/80. Nâng dần khi coverage tăng (đừng đặt trên mức thực tế kẻo CI đỏ).
 
 ## Lệnh nhanh
 

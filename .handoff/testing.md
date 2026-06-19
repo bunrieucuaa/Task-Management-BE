@@ -9,6 +9,9 @@ npm run test:coverage # kèm coverage (v8) → ./coverage
 ```
 
 - Runner: **Vitest 3** (`vitest.config.ts`). Môi trường `node`, alias `@` → `src`.
+- **Coverage threshold (phiên 7):** `coverage.thresholds` = stmts 80 / branch 80 / funcs 82 /
+  lines 80 (floor dưới mức hiện tại ~83%). **CI chạy `npm run test:coverage`** nên ngưỡng được
+  enforce; chạy local `npm run test:coverage` để kiểm trước khi push. Nâng floor khi coverage tăng.
 - Env test được set sẵn trong config (`JWT_SECRET` mạnh, `NODE_ENV=test`) để
   `config/index.ts` không fail-fast. **Không cần `.env` để chạy test.**
 - File test: `src/**/*.spec.ts` (đặt cạnh source). `tsconfig.json` đã loại trừ
