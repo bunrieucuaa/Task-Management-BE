@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { getUserById } from '../services/user.service';
 import { UserRole, UserStatus } from '@/generated/prisma/client';
-import { verifyToken } from '@/utils/jwt.util';
+import { verifyToken, TokenExpiredError } from '@/utils/jwt.util';
 import { TokenType } from '@/shared/interfaces/IJwt';
-import jwt from 'jsonwebtoken';
 import { RESPONSE_CODES, ResponseCodeConfig } from '@/constants/response-codes.constant';
 
 
@@ -36,7 +35,7 @@ export const authenticate = async (
   try {
     payload = verifyToken(token);
   } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
+    if (error instanceof TokenExpiredError) {
       res.status(401).json({
         code: 401,
         success: false,

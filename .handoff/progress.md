@@ -4,6 +4,12 @@
 
 ## Trạng thái hiện tại
 
+- 2026-06-19 (phiên 6): ✅ **Sửa bug `verifyToken`** (TDD). `jwt.util.ts` export 2 lớp lỗi
+  `TokenExpiredError`/`InvalidTokenError` (giữ message tiếng Việt); `auth.middleware.ts` check
+  `instanceof TokenExpiredError` (bỏ `import jwt`) → token hết hạn nay trả đúng `401 "Token has
+  expired"` thay vì `"Invalid token"`. Cập nhật test cũ trong `auth.middleware.spec.ts` thành
+  assert hành vi đúng. **Tổng: 193 test / 16 file, tất cả PASS**, typecheck + build sạch. (Số test
+  không đổi — sửa test sẵn có chứ không thêm.)
 - 2026-06-19 (phiên 5): ✅ Thêm 3 nhánh integration (25 → 28 test trong `routes.integration.spec.ts`):
   GET tasks lọc `deadlineFrom`/`deadlineTo` (range gte/lte vào where), GET comments **403** khi
   user không đọc được task cha, addMember **409** khi user đã là thành viên. **Tổng: 193 test /
@@ -49,8 +55,8 @@
 - ~~Lọc task theo `deadlineFrom/deadlineTo`, comment list của task không có quyền (403),
   addMember khi user đã là thành viên (409)~~ ✅ xong (phiên 5).
 - Có thể thêm DB integration test thật bằng Testcontainers/Postgres nếu muốn kiểm thử Prisma query thật.
-- Cân nhắc sửa quirk `verifyToken` nuốt `TokenExpiredError` (xem `testing.md` mục Quirk) nếu
-  muốn message "Token has expired" chính xác.
+- ~~Sửa quirk `verifyToken` nuốt `TokenExpiredError`~~ ✅ xong (phiên 6) — token hết hạn trả đúng
+  `"Token has expired"` (xem `testing.md` mục Quirk).
 - Bật coverage threshold trong `vitest.config.ts` nếu muốn ép mức cover tối thiểu.
 
 ## Lệnh nhanh

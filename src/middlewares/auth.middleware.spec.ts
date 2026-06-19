@@ -56,18 +56,16 @@ describe('authenticate', () => {
     expect((res.body as any).message).toBe('Invalid token');
   });
 
-  it('401 for an expired token', async () => {
-    // NOTE: verifyToken() normalizes TokenExpiredError into a plain Error, so the
-    // middleware's `instanceof jwt.TokenExpiredError` branch is unreachable and the
-    // response message collapses to the generic "Invalid token". Still a 401, which
-    // is what the FE refresh interceptor keys off of. Asserting actual behavior.
+  it('401 "Token has expired" for an expired token', async () => {
+    // verifyToken throws a typed TokenExpiredError so the middleware can surface the
+    // precise message (still 401, which is what the FE refresh interceptor keys off of).
     const expired = jwt.sign({ sub: '1', type: TokenType.Access, tokenVersion: 0 }, config.jwt.secret, {
       expiresIn: -5,
     });
     const res = mockResponse();
     await authenticate(mockRequest({ headers: { authorization: `Bearer ${expired}` } }), res, mockNext());
     expect(res.statusCode).toBe(401);
-    expect((res.body as any).message).toBe('Invalid token');
+    expect((res.body as any).message).toBe('Token has expired');
   });
 
   it('401 when a refresh token is used as an access token', async () => {

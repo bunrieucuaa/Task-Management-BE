@@ -48,13 +48,16 @@ npm run test:coverage # kèm coverage (v8) → ./coverage
 | Integration | `app.integration.spec.ts` | supertest: login/refresh/me/users RBAC/404 (full stack, mock prisma) |
 | Integration | `routes.integration.spec.ts` | supertest: project/task/comment routes — create RBAC, 404/400, access checks, nested comments, delete author-vs-privileged, PATCH project/task, addMember theo email (+ **409** đã là thành viên), task list `projectId`/`status`/`priority`/`deadlineFrom`-`deadlineTo` filter, DELETE project (archive), removeMember chặn owner, token revocation, GET comments **403** khi không đọc được task cha |
 
-## Quirk đã phát hiện (chưa sửa, chỉ ghi nhận)
+## Quirk `verifyToken` — ĐÃ SỬA (phiên 6, 2026-06-19)
 
-- `utils/jwt.util.ts#verifyToken` chuẩn hoá `TokenExpiredError` thành `Error` thường,
-  nên nhánh `instanceof jwt.TokenExpiredError` trong `auth.middleware.ts` **không bao giờ
-  chạy** → token hết hạn trả `401 "Invalid token"` thay vì `"Token has expired"`. Vẫn 401
-  nên FE refresh hoạt động bình thường. Nếu muốn message chính xác, cần sửa middleware tự
-  verify hoặc đừng wrap lỗi trong verifyToken.
+- Trước đây `utils/jwt.util.ts#verifyToken` chuẩn hoá `TokenExpiredError` thành `Error` thường,
+  nên nhánh `instanceof jwt.TokenExpiredError` trong `auth.middleware.ts` không bao giờ chạy →
+  token hết hạn trả `401 "Invalid token"` thay vì `"Token has expired"`.
+- **Cách sửa:** `jwt.util.ts` giờ export 2 lớp lỗi `TokenExpiredError` / `InvalidTokenError`
+  (giữ nguyên message tiếng Việt `'Token đã hết hạn'` / `'Token không hợp lệ'` → `jwt.util.spec.ts`
+  vẫn xanh). `auth.middleware.ts` check `error instanceof TokenExpiredError` (import từ `jwt.util`,
+  bỏ `import jwt`) → token hết hạn nay trả đúng `401 "Token has expired"`. Vẫn là 401 nên FE refresh
+  không đổi. Test: `auth.middleware.spec.ts` → "401 \"Token has expired\" for an expired token".
 
 ## Khi thêm test
 
