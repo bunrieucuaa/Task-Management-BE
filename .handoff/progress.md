@@ -4,6 +4,10 @@
 
 ## Trạng thái hiện tại
 
+- 2026-06-18 (phiên 4): ✅ Bổ sung 4 nhánh integration (21 → 25 test trong file): DELETE project
+  (soft-delete/archive), removeMember chặn xoá owner, GET tasks lọc `status`+`priority`, token
+  revocation (tokenVersion lệch → 401). **Tổng: 190 test / 16 file, tất cả PASS**, typecheck sạch.
+  (Tăng từ 186/16.)
 - 2026-06-18 (phiên 3): ✅ Mở rộng `routes.integration.spec.ts` thêm 6 nhánh (15 → 21 test):
   PATCH project (owner/PM), addMember theo email (201 + 404 khi không có user), PATCH task
   (creator), GET tasks `?projectId=` có/không quyền truy cập. **Tổng: 186 test / 16 file, tất
@@ -36,9 +40,9 @@
 - ~~Integration test cho project/task/comment routes~~ ✅ xong (phiên 2 + mở rộng phiên 3,
   `src/routes.integration.spec.ts`): create RBAC, 404/400, access, nested comments, PATCH
   project/task, addMember theo email, task list `projectId` filter.
-- **(ưu tiên kế tiếp)** Còn nhánh chưa cover qua HTTP: DELETE project (archive/soft-delete),
-  removeMember (chặn xoá owner), GET tasks lọc theo `status`/`priority`/`deadline`,
-  refresh-token revocation (tokenVersion lệch → 401). Theo pattern mock prisma + supertest.
+- ~~DELETE project (archive), removeMember (chặn xoá owner), lọc task `status`/`priority`,
+  token revocation~~ ✅ xong (phiên 4). Còn có thể thêm: lọc task theo `deadlineFrom/deadlineTo`,
+  comment list của task không có quyền (403), addMember khi user đã là thành viên (409).
 - Có thể thêm DB integration test thật bằng Testcontainers/Postgres nếu muốn kiểm thử Prisma query thật.
 - Cân nhắc sửa quirk `verifyToken` nuốt `TokenExpiredError` (xem `testing.md` mục Quirk) nếu
   muốn message "Token has expired" chính xác.

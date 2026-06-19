@@ -154,6 +154,30 @@ describe('project routes', () => {
     expect(res.status).toBe(404);
     expect(db.projectMember.create).not.toHaveBeenCalled();
   });
+
+  it('DELETE /api/v1/projects/:id → 200 soft-deletes (archives) the project', async () => {
+    db.user.findUnique.mockResolvedValue(dbUser({ role: UserRole.PM }));
+    db.project.findUnique.mockResolvedValue({ id: 1, ownerId: 1 });
+    db.project.update.mockResolvedValue({ id: 1, status: 'ARCHIVED' });
+    const res = await request(app).delete('/api/v1/projects/1').set('Authorization', auth(UserRole.PM));
+    expect(res.status).toBe(200);
+    // Soft delete = status flip, not a row removal.
+    expect(db.project.delete).not.toHaveBeenCalled();
+    expect(db.project.update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ status: 'ARCHIVED' }) }),
+    );
+  });
+
+  it('DELETE /api/v1/projects/:id/members/:userId → 403 when removing the owner', async () => {
+    db.user.findUnique.mockResolvedValue(dbUser({ role: UserRole.PM }));
+    // The target user IS the project owner → removal is forbidden.
+    db.project.findUnique.mockResolvedValue({ id: 1, ownerId: 2 });
+    const res = await request(app)
+      .delete('/api/v1/projects/1/members/2')
+      .set('Authorization', auth(UserRole.PM));
+    expect(res.status).toBe(403);
+    expect(db.projectMember.delete).not.toHaveBeenCalled();
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -233,6 +257,34 @@ describe('task routes', () => {
       .set('Authorization', auth(UserRole.MEMBER));
     expect(res.status).toBe(403);
     expect(db.task.findMany).not.toHaveBeenCalled();
+  });
+
+  it('GET /api/v1/tasks?status=TODO&priority=HIGH → 200 and passes the filters to the query', async () => {
+    db.user.findUnique.mockResolvedValue(dbUser({ role: UserRole.ADMIN }));
+    db.task.count.mockResolvedValue(0);
+    db.task.findMany.mockResolvedValue([]);
+    const res = await request(app)
+      .get('/api/v1/tasks?status=TODO&priority=HIGH')
+      .set('Authorization', auth(UserRole.ADMIN));
+    expect(res.status).toBe(200);
+    // Filters land in the prisma `where.AND` conditions.
+    const whereArg = db.task.findMany.mock.calls[0][0].where;
+    expect(JSON.stringify(whereArg)).toContain('TODO');
+    expect(JSON.stringify(whereArg)).toContain('HIGH');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Token revocation (soft logout via tokenVersion)
+// ---------------------------------------------------------------------------
+describe('token revocation', () => {
+  it('401 when the token tokenVersion is stale (e.g. after logout/password change)', async () => {
+    // Token minted at version 0, but the stored user has advanced to version 5.
+    db.user.findUnique.mockResolvedValue(dbUser({ tokenVersion: 5 }));
+    const res = await request(app)
+      .get('/api/v1/auth/me')
+      .set('Authorization', auth(UserRole.MEMBER));
+    expect(res.status).toBe(401);
   });
 });
 
