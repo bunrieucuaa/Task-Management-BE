@@ -2,6 +2,43 @@
 
 > Cập nhật file này cuối mỗi phiên. Mục quan trọng nhất: **Trạng thái hiện tại** + **Việc kế tiếp**.
 
+## 🚀 CHUẨN BỊ DEPLOY — việc cần làm (chốt 2026-06-19, làm trong chat MỚI)
+
+> Hướng deploy đã chốt: **PaaS** — BE lên **Render/Railway** + **managed Postgres**, FE lên
+> **Vercel/Netlify** (xem `react-task-managerment/.handoff/`). Test hiện tại coi như ĐỦ; tập trung
+> fix dưới đây rồi deploy. Phạm vi đã chốt với user: **P0 + P1** (hoãn P2).
+
+### P0 — Bug chặn (BE)
+- [ ] **PM bị khoá khỏi toàn bộ app.** `src/routes/auth.route.ts:21`:
+  `router.get('/me', authenticate, authorize(UserRole.ADMIN, UserRole.MEMBER), getMeHandler)` —
+  **thiếu PM** → PM gọi `/auth/me` bị **403** → interceptor FE tự logout khi gặp 403 → PM không
+  đăng nhập nổi. `/me` là "của chính mình", không nên gate theo role. **Fix:** bỏ `authorize(...)`
+  → `router.get('/me', authenticate, getMeHandler)`. Thêm test trong `app.integration.spec.ts`:
+  PM (token role PM) GET `/auth/me` → **200** (hiện chưa có case này). Kiểm `npm test` + typecheck.
+
+### P1 — Dọn cho production (BE)
+- [ ] **Bỏ `console.log("Error", errorResponse)` ở `src/controllers/user.controller.ts:86`** (debug
+  sót). Các `console.log` trong `seeds/seed.ts` và `server.ts` (startup) thì GIỮ — là CLI/log hợp lệ.
+
+### Cấu hình deploy BE (Render/Railway)
+- Start: `npm run start` (`node dist/server.js`); build: `npm run build` (`tsc && tsc-alias`).
+- **Migrate khi release:** chạy `npx prisma migrate deploy` (KHÔNG dùng `migrate dev`/`reset` ở prod).
+  Cân nhắc thêm script `"start:prod": "prisma migrate deploy && node dist/server.js"` hoặc release
+  command của platform. Seed admin lần đầu: `npm run seed` (đổi mật khẩu mặc định ngay sau đó).
+- Env bắt buộc: **`DATABASE_URL`** (managed Postgres), **`JWT_SECRET`** (≥32 ký tự mạnh — app
+  fail-fast nếu yếu), **`CORS_ORIGIN`** = URL FE production, `PORT` (platform tự cấp → `config` đọc
+  `process.env.PORT`, kiểm lại), `NODE_ENV=production`. `REDIS_*` trong `.env.example` HIỆN KHÔNG
+  dùng → bỏ qua hoặc xoá khỏi example cho gọn.
+- Thêm **`engines.node`** vào `package.json` (vd `">=20 <23"`) để platform chọn đúng Node. Healthcheck
+  platform trỏ tới **`GET /health`** (đã có).
+- `docker-compose.yml` hiện chỉ chạy Postgres (dev). `Dockerfile` đang **rỗng** — KHÔNG cần cho PaaS,
+  bỏ qua (hoặc xoá để khỏi nhầm).
+
+### P2 — HOÃN (có trong DB schema nhưng chưa implement)
+AI (`AiHistory`/`AiActionType`), Task attachments, Tags/TaskTag, ActivityLog. Để sau khi deploy.
+
+---
+
 ## Trạng thái hiện tại
 
 - 2026-06-19 (phiên 7): ✅ **Bật coverage threshold**. Thêm `coverage.thresholds` vào
