@@ -155,6 +155,23 @@ describe('project routes', () => {
     expect(db.projectMember.create).not.toHaveBeenCalled();
   });
 
+  it('POST /api/v1/projects/:id/members → 409 when the user is already a member', async () => {
+    db.user.findUnique.mockImplementation(({ where }: { where: Record<string, unknown> }) =>
+      Promise.resolve(
+        where.email ? dbUser({ id: 2, email: 'bob@example.com' }) : dbUser({ role: UserRole.PM }),
+      ),
+    );
+    db.project.findUnique.mockResolvedValue({ id: 1, ownerId: 1 });
+    // A membership row already exists for this user → conflict.
+    db.projectMember.findUnique.mockResolvedValue({ id: 5 });
+    const res = await request(app)
+      .post('/api/v1/projects/1/members')
+      .set('Authorization', auth(UserRole.PM))
+      .send({ email: 'bob@example.com' });
+    expect(res.status).toBe(409);
+    expect(db.projectMember.create).not.toHaveBeenCalled();
+  });
+
   it('DELETE /api/v1/projects/:id → 200 soft-deletes (archives) the project', async () => {
     db.user.findUnique.mockResolvedValue(dbUser({ role: UserRole.PM }));
     db.project.findUnique.mockResolvedValue({ id: 1, ownerId: 1 });
@@ -272,6 +289,21 @@ describe('task routes', () => {
     expect(JSON.stringify(whereArg)).toContain('TODO');
     expect(JSON.stringify(whereArg)).toContain('HIGH');
   });
+
+  it('GET /api/v1/tasks?deadlineFrom=…&deadlineTo=… → 200 and applies a deadline range', async () => {
+    db.user.findUnique.mockResolvedValue(dbUser({ role: UserRole.ADMIN }));
+    db.task.count.mockResolvedValue(0);
+    db.task.findMany.mockResolvedValue([]);
+    const res = await request(app)
+      .get('/api/v1/tasks?deadlineFrom=2026-01-01&deadlineTo=2026-12-31')
+      .set('Authorization', auth(UserRole.ADMIN));
+    expect(res.status).toBe(200);
+    // Coerced to a deadline gte/lte range in the prisma `where`.
+    const serialized = JSON.stringify(db.task.findMany.mock.calls[0][0].where);
+    expect(serialized).toContain('deadline');
+    expect(serialized).toContain('gte');
+    expect(serialized).toContain('lte');
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -305,6 +337,18 @@ describe('comment routes', () => {
       .set('Authorization', auth(UserRole.MEMBER));
     expect(res.status).toBe(200);
     expect(res.body.data.data).toHaveLength(1);
+  });
+
+  it('GET /api/v1/tasks/:taskId/comments → 403 when the user cannot read the parent task', async () => {
+    db.user.findUnique.mockResolvedValue(dbUser({ role: UserRole.MEMBER }));
+    // Task lives in a project the requester neither owns nor belongs to.
+    db.task.findUnique.mockResolvedValue({ id: 1, projectId: 5, creatorId: 2 });
+    db.project.findUnique.mockResolvedValue({ id: 5, ownerId: 9, members: [] });
+    const res = await request(app)
+      .get('/api/v1/tasks/1/comments')
+      .set('Authorization', auth(UserRole.MEMBER));
+    expect(res.status).toBe(403);
+    expect(db.taskComment.findMany).not.toHaveBeenCalled();
   });
 
   it('POST /api/v1/tasks/:taskId/comments → 201', async () => {

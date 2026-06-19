@@ -31,7 +31,7 @@ npm run test:coverage # kèm coverage (v8) → ./coverage
 - **`express.mock.ts`** — `mockRequest/mockResponse/mockNext` cho test middleware
   (res.status/json chainable, lưu `statusCode` + `body`).
 
-## Đã cover (190 test, 16 file)
+## Đã cover (193 test, 16 file)
 
 | Lớp | File | Ghi chú |
 |-----|------|---------|
@@ -46,7 +46,7 @@ npm run test:coverage # kèm coverage (v8) → ./coverage
 | Middleware | `middlewares/auth.middleware.spec.ts` | authenticate (token/role/version/mustChangePassword), authorize |
 | Middleware | `middlewares/error.middleware.spec.ts` | status/message/stack theo NODE_ENV |
 | Integration | `app.integration.spec.ts` | supertest: login/refresh/me/users RBAC/404 (full stack, mock prisma) |
-| Integration | `routes.integration.spec.ts` | supertest: project/task/comment routes — create RBAC, 404/400, access checks, nested comments, delete author-vs-privileged, PATCH project/task, addMember theo email, task list `projectId`/`status`/`priority` filter, DELETE project (archive), removeMember chặn owner, token revocation |
+| Integration | `routes.integration.spec.ts` | supertest: project/task/comment routes — create RBAC, 404/400, access checks, nested comments, delete author-vs-privileged, PATCH project/task, addMember theo email (+ **409** đã là thành viên), task list `projectId`/`status`/`priority`/`deadlineFrom`-`deadlineTo` filter, DELETE project (archive), removeMember chặn owner, token revocation, GET comments **403** khi không đọc được task cha |
 
 ## Quirk đã phát hiện (chưa sửa, chỉ ghi nhận)
 
