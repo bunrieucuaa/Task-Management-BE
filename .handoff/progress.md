@@ -9,8 +9,8 @@
 > fix dưới đây rồi deploy. Phạm vi đã chốt với user: **P0 + P1** (hoãn P2).
 
 > ✅ **ĐÃ LÀM XONG P0 + P1 + cấu hình deploy (phiên 8, 2026-06-19).** Xem mục "Trạng thái hiện tại".
-> Việc còn lại chỉ là **vận hành**: tạo managed Postgres, đặt env trên platform, deploy, rồi đặt
-> `CORS_ORIGIN` (BE) = URL FE thật và `VITE_BASE_API_URL` (FE) = URL BE thật.
+> 🟢 **ĐÃ DEPLOY LIVE (phiên 9, 2026-06-21):** Neon (Postgres) + Render (BE) + Vercel (FE). Admin
+> đăng nhập OK. Stack đang chạy. Bài học deploy ở entry phiên 9.
 
 ### P0 — Bug chặn (BE)
 - [x] **PM bị khoá khỏi toàn bộ app.** `src/routes/auth.route.ts:21`:
@@ -45,6 +45,27 @@ AI (`AiHistory`/`AiActionType`), Task attachments, Tags/TaskTag, ActivityLog. Đ
 
 ## Trạng thái hiện tại
 
+- 2026-06-21 (phiên 9): 🟢 **DEPLOY LIVE** — Neon (Postgres) + **Render** (BE) + Vercel (FE). Admin
+  `admin@system.local` / `Test@123456` đăng nhập OK qua FE production.
+  **Cấu hình Render (plan Free):** Branch `dev`; Build `npm install --include=dev && npm run build`;
+  Start `npm run start:prod`. Env: `DATABASE_URL` (Neon, `?sslmode=require`), `JWT_SECRET` (≥32),
+  `NODE_ENV=production`, `CORS_ORIGIN` = URL FE Vercel (khớp **chính xác**, không `/` cuối).
+  **Bài học (lỗi đã gặp & fix):**
+  1. **Toàn bộ deploy-prep phiên 8 chưa từng commit/push** → Render kéo `origin/dev` cũ, báo
+     `Missing script "start:prod"`. Fix: commit + push (`719b45e`). *Luôn push trước khi deploy.*
+  2. **`NODE_ENV=production` làm `npm install` bỏ devDeps** (`tsc`/`tsc-alias`/`prisma`) → build/migrate
+     fail. Fix: Build Command thêm **`--include=dev`**.
+  3. **ESM `ERR_MODULE_NOT_FOUND './app'`**: `type:module` + `moduleResolution:bundler` → tsc emit
+     import KHÔNG có `.js`, Node runtime bắt buộc có. Fix: `tsc-alias ... **--resolve-full-paths**`
+     (đã sửa trong `package.json` build script).
+  4. **Render Free KHÔNG có Pre-Deploy Command** → chạy migrate qua `start:prod`
+     (`prisma migrate deploy && node dist/server.js`). `prisma.config.ts` đọc `DATABASE_URL` từ env → OK.
+  5. **Render Free KHÔNG có Shell** → không seed được trên server. **Seed từ máy local trỏ vào Neon:**
+     `DATABASE_URL="<neon-url>" npm run seed` (Neon mở public, inline env override `.env`).
+  6. **CORS phải khớp chính xác origin** (`app.ts` dùng `corsOrigins.includes(origin)`): browser gửi
+     `Origin` chỉ `scheme+host`, không `/` cuối, không path. Sai định dạng → 401/CORS.
+  ⚠️ **Còn lại nên làm:** đổi mật khẩu admin mặc định (đang public trong repo); cân nhắc merge
+  `dev → master` rồi trỏ Render/Vercel sang `master` cho production ổn định.
 - 2026-06-19 (phiên 8): ✅ **CHUẨN BỊ DEPLOY — P0 + P1 + cấu hình (BE).**
   - **P0 (TDD):** bỏ `authorize(ADMIN, MEMBER)` khỏi `GET /auth/me` (`src/routes/auth.route.ts`) →
     `/me` chỉ cần `authenticate`. Thêm test trong `app.integration.spec.ts`: PM GET `/me` → **200**
