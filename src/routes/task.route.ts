@@ -3,6 +3,7 @@ import { authenticate } from '../middlewares/auth.middleware';
 import * as taskController from '../controllers/task.controller';
 import commentRoutes from './comment.route';
 import taskTagRoutes from './task-tag.route';
+import activityRoutes from './activity.route';
 
 const router = Router();
 
@@ -21,5 +22,8 @@ router.use('/:taskId/comments', commentRoutes);
 
 // Nested tag attach/detach routes: /api/v1/tasks/:taskId/tags
 router.use('/:taskId/tags', taskTagRoutes);
+
+// Nested activity history: /api/v1/tasks/:taskId/activities
+router.use('/:taskId/activities', activityRoutes);
 
 export default router;

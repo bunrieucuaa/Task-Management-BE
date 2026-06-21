@@ -182,6 +182,24 @@ describe('updateTask', () => {
     expect(db.task.update.mock.calls[0][0].data).toEqual({ status: TaskStatus.DONE });
   });
 
+  it('logs a STATUS_CHANGED activity when the status changes', async () => {
+    db.task.findUnique.mockResolvedValue({
+      id: 5, projectId: 1, creatorId: 1, assigneeId: null, status: TaskStatus.TODO,
+    });
+    grantProjectAccess(1);
+    db.task.update.mockResolvedValue({ id: 5, status: TaskStatus.IN_PROGRESS });
+    db.activityLog.create.mockResolvedValue({ id: 1 });
+
+    await updateTask(1, UserRole.MEMBER, 5, { status: TaskStatus.IN_PROGRESS });
+
+    expect(db.activityLog.create.mock.calls[0][0].data).toMatchObject({
+      taskId: 5,
+      action: 'STATUS_CHANGED',
+      oldValue: { status: TaskStatus.TODO },
+      newValue: { status: TaskStatus.IN_PROGRESS },
+    });
+  });
+
   it('validates a new assignee belongs to the project', async () => {
     db.task.findUnique.mockResolvedValue({ id: 5, projectId: 1, creatorId: 1, assigneeId: null });
     grantProjectAccess(1);

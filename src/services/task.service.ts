@@ -13,6 +13,7 @@ import {
 } from '@/shared/interfaces/ITask';
 import type { CreateTaskDto, UpdateTaskDto } from '@/dtos/task.dto';
 import { assertProjectAccess } from './project.service';
+import { logActivity, ACTIVITY_ACTIONS } from './activity.service';
 
 type TaskItem = Prisma.TaskGetPayload<{ select: typeof selectTaskListItem }>;
 type TaskWithTags = Omit<
@@ -78,10 +79,18 @@ export const assertTaskEditable = async (
   userId: number,
   role: UserRole | null,
   taskId: number,
-): Promise<{ id: number; projectId: number | null; creatorId: number | null; assigneeId: number | null }> => {
+) => {
   const task = await prisma.task.findUnique({
     where: { id: taskId },
-    select: { id: true, projectId: true, creatorId: true, assigneeId: true },
+    select: {
+      id: true,
+      projectId: true,
+      creatorId: true,
+      assigneeId: true,
+      status: true,
+      priority: true,
+      deadline: true,
+    },
   });
   if (!task) {
     throw new ServiceError(RESPONSE_CODES.TASK_NOT_FOUND);
@@ -109,7 +118,7 @@ export const createTask = async (
     await assertAssigneeIsMember(dto.projectId, dto.assigneeId);
   }
 
-  return prisma.task.create({
+  const created = await prisma.task.create({
     data: {
       title: dto.title,
       description: dto.description ?? null,
@@ -121,6 +130,12 @@ export const createTask = async (
     },
     select: selectTaskListItem,
   });
+
+  await logActivity(created.id, creatorId, ACTIVITY_ACTIONS.TASK_CREATED, undefined, {
+    title: created.title,
+  });
+
+  return created;
 };
 
 export const getTasks = async (
@@ -232,7 +247,7 @@ export const updateTask = async (
     await assertAssigneeIsMember(task.projectId, dto.assigneeId);
   }
 
-  return prisma.task.update({
+  const updated = await prisma.task.update({
     where: { id: taskId },
     data: {
       ...(dto.title !== undefined && { title: dto.title }),
@@ -244,6 +259,31 @@ export const updateTask = async (
     },
     select: selectTaskListItem,
   });
+
+  // Record an activity entry for each meaningful field change.
+  const sameTime = (a: Date | null, b: Date | null) =>
+    (a ? a.getTime() : null) === (b ? b.getTime() : null);
+
+  if (dto.status !== undefined && dto.status !== task.status) {
+    await logActivity(taskId, userId, ACTIVITY_ACTIONS.STATUS_CHANGED, { status: task.status }, { status: dto.status });
+  }
+  if (dto.assigneeId !== undefined && dto.assigneeId !== task.assigneeId) {
+    await logActivity(taskId, userId, ACTIVITY_ACTIONS.ASSIGNEE_CHANGED, { assigneeId: task.assigneeId }, { assigneeId: dto.assigneeId });
+  }
+  if (dto.priority !== undefined && dto.priority !== task.priority) {
+    await logActivity(taskId, userId, ACTIVITY_ACTIONS.PRIORITY_CHANGED, { priority: task.priority }, { priority: dto.priority });
+  }
+  if (dto.deadline !== undefined && !sameTime(dto.deadline, task.deadline)) {
+    await logActivity(
+      taskId,
+      userId,
+      ACTIVITY_ACTIONS.DEADLINE_CHANGED,
+      { deadline: task.deadline ? task.deadline.toISOString() : null },
+      { deadline: dto.deadline ? dto.deadline.toISOString() : null },
+    );
+  }
+
+  return updated;
 };
 
 export const deleteTask = async (

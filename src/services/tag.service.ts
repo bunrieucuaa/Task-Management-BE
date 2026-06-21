@@ -7,6 +7,7 @@ import { isAdmin, isPrivileged } from '@/shared/auth/roles';
 import { selectTagItem } from '@/shared/interfaces/ITag';
 import type { CreateTagDto } from '@/dtos/tag.dto';
 import { assertTaskEditable } from './task.service';
+import { logActivity, ACTIVITY_ACTIONS } from './activity.service';
 
 type TagItem = Prisma.TagGetPayload<{ select: typeof selectTagItem }>;
 
@@ -75,6 +76,7 @@ export const attachTagToTask = async (
   }
 
   await prisma.taskTag.create({ data: { taskId, tagId } });
+  await logActivity(taskId, userId, ACTIVITY_ACTIONS.TAG_ADDED, undefined, { tagId });
 };
 
 /** Detach a tag from a task. Requires edit access to the task. */
@@ -86,4 +88,5 @@ export const detachTagFromTask = async (
 ): Promise<void> => {
   await assertTaskEditable(userId, role, taskId);
   await prisma.taskTag.deleteMany({ where: { taskId, tagId } });
+  await logActivity(taskId, userId, ACTIVITY_ACTIONS.TAG_REMOVED, { tagId });
 };

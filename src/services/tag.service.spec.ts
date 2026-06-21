@@ -96,6 +96,10 @@ describe('attachTagToTask', () => {
     await attachTagToTask(1, UserRole.MEMBER, 5, 7);
 
     expect(db.taskTag.create.mock.calls[0][0].data).toMatchObject({ taskId: 5, tagId: 7 });
+    expect(db.activityLog.create.mock.calls[0][0].data).toMatchObject({
+      action: 'TAG_ADDED',
+      newValue: { tagId: 7 },
+    });
   });
 
   it('throws TAG_NOT_FOUND when the tag does not exist', async () => {
