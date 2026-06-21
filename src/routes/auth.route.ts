@@ -6,8 +6,7 @@ import {
   logoutHandler,
   refreshHandler,
 } from '../controllers/auth.controller';
-import { authenticate, authorize } from '../middlewares/auth.middleware';
-import { UserRole } from '@/generated/prisma/enums';
+import { authenticate } from '../middlewares/auth.middleware';
 
 const router = Router();
 
@@ -18,6 +17,7 @@ router.post('/refresh', refreshHandler);
 // Protected routes
 router.post('/change-password', authenticate, changePasswordHandler);
 router.post('/logout', authenticate, logoutHandler);
-router.get('/me', authenticate, authorize(UserRole.ADMIN, UserRole.MEMBER), getMeHandler);
+// `/me` trả về chính user đang đăng nhập — KHÔNG gate theo role (PM/ADMIN/MEMBER đều dùng).
+router.get('/me', authenticate, getMeHandler);
 
 export default router;

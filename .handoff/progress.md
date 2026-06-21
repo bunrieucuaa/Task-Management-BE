@@ -8,8 +8,12 @@
 > **Vercel/Netlify** (xem `react-task-managerment/.handoff/`). Test hiện tại coi như ĐỦ; tập trung
 > fix dưới đây rồi deploy. Phạm vi đã chốt với user: **P0 + P1** (hoãn P2).
 
+> ✅ **ĐÃ LÀM XONG P0 + P1 + cấu hình deploy (phiên 8, 2026-06-19).** Xem mục "Trạng thái hiện tại".
+> Việc còn lại chỉ là **vận hành**: tạo managed Postgres, đặt env trên platform, deploy, rồi đặt
+> `CORS_ORIGIN` (BE) = URL FE thật và `VITE_BASE_API_URL` (FE) = URL BE thật.
+
 ### P0 — Bug chặn (BE)
-- [ ] **PM bị khoá khỏi toàn bộ app.** `src/routes/auth.route.ts:21`:
+- [x] **PM bị khoá khỏi toàn bộ app.** `src/routes/auth.route.ts:21`:
   `router.get('/me', authenticate, authorize(UserRole.ADMIN, UserRole.MEMBER), getMeHandler)` —
   **thiếu PM** → PM gọi `/auth/me` bị **403** → interceptor FE tự logout khi gặp 403 → PM không
   đăng nhập nổi. `/me` là "của chính mình", không nên gate theo role. **Fix:** bỏ `authorize(...)`
@@ -17,7 +21,7 @@
   PM (token role PM) GET `/auth/me` → **200** (hiện chưa có case này). Kiểm `npm test` + typecheck.
 
 ### P1 — Dọn cho production (BE)
-- [ ] **Bỏ `console.log("Error", errorResponse)` ở `src/controllers/user.controller.ts:86`** (debug
+- [x] **Bỏ `console.log("Error", errorResponse)` ở `src/controllers/user.controller.ts:86`** (debug
   sót). Các `console.log` trong `seeds/seed.ts` và `server.ts` (startup) thì GIỮ — là CLI/log hợp lệ.
 
 ### Cấu hình deploy BE (Render/Railway)
@@ -41,6 +45,17 @@ AI (`AiHistory`/`AiActionType`), Task attachments, Tags/TaskTag, ActivityLog. Đ
 
 ## Trạng thái hiện tại
 
+- 2026-06-19 (phiên 8): ✅ **CHUẨN BỊ DEPLOY — P0 + P1 + cấu hình (BE).**
+  - **P0 (TDD):** bỏ `authorize(ADMIN, MEMBER)` khỏi `GET /auth/me` (`src/routes/auth.route.ts`) →
+    `/me` chỉ cần `authenticate`. Thêm test trong `app.integration.spec.ts`: PM GET `/me` → **200**
+    (trước fix là 403, đã xem test đỏ trước khi sửa). Bỏ luôn import `authorize`/`UserRole` thừa.
+  - **P1:** xoá `console.log("Error", ...)` ở `user.controller.ts` (`listUsersHandler`).
+  - **Cấu hình deploy:** thêm script **`start:prod`** = `prisma migrate deploy && node dist/server.js`;
+    thêm **`engines.node` `">=20 <23"`** vào `package.json`; xoá block **`REDIS_*`** không dùng khỏi
+    `.env.example`; **xoá `Dockerfile` rỗng** (giữ `docker-compose.yml` cho dev Postgres).
+    `config.port` đã đọc `process.env.PORT` sẵn (OK cho Render/Railway), `GET /health` đã có.
+  - **Kiểm chứng:** `npm test` **194 PASS** (tăng từ 193, +1 case PM), `typecheck` sạch, `build` exit 0.
+  - **Còn lại (vận hành):** đặt `CORS_ORIGIN` = URL FE thật sau khi FE deploy; seed admin lần đầu.
 - 2026-06-19 (phiên 7): ✅ **Bật coverage threshold**. Thêm `coverage.thresholds` vào
   `vitest.config.ts` (floor: stmts 80 / branch 80 / funcs 82 / lines 80 — dưới mức hiện tại
   ~83% vài điểm để CI không đỏ) và đổi bước test trong CI sang `npm run test:coverage` để ngưỡng

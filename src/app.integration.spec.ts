@@ -105,6 +105,15 @@ describe('GET /api/v1/auth/me', () => {
     expect(res.status).toBe(200);
     expect(res.body.data.user).toMatchObject({ id: 1, email: 'alice@example.com' });
   });
+
+  it('200 with a valid PM token (/me is not role-gated)', async () => {
+    db.user.findUnique.mockResolvedValue(dbUser({ role: UserRole.PM }));
+    const res = await request(app)
+      .get('/api/v1/auth/me')
+      .set('Authorization', `Bearer ${tokenFor(UserRole.PM)}`);
+    expect(res.status).toBe(200);
+    expect(res.body.data.user).toMatchObject({ id: 1, email: 'alice@example.com' });
+  });
 });
 
 describe('protected user routes (RBAC)', () => {

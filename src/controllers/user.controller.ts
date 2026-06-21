@@ -83,8 +83,6 @@ export const listUsersHandler = async (req: Request, res: Response): Promise<voi
             RESPONSE_CODES.INTERNAL_SERVER_ERROR,
             error instanceof Error ? error.message : 'Failed to fetch users',
         );
-        console.log("Error", errorResponse);
-        
         res.status(getHttpStatus(RESPONSE_CODES.INTERNAL_SERVER_ERROR)).json(errorResponse);
     }
 }

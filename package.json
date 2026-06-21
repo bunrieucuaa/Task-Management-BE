@@ -4,10 +4,14 @@
   "private": true,
   "type": "module",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=20 <23"
+  },
   "scripts": {
     "dev": "nodemon",
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "start": "node dist/server.js",
+    "start:prod": "prisma migrate deploy && node dist/server.js",
     "seed": "tsx src/seeds/seed.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
