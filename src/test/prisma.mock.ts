@@ -40,6 +40,8 @@ export const createPrismaMock = () => {
     task: modelMethods(),
     taskComment: modelMethods(),
     tag: modelMethods(),
+    taskTag: modelMethods(),
+    activityLog: modelMethods(),
     $transaction: vi.fn(),
   };
 

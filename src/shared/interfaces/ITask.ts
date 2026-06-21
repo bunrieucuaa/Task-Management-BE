@@ -9,6 +9,7 @@ export interface TaskListParams {
   assigneeId?: number;
   status?: TaskStatus;
   priority?: TaskPriority;
+  tagId?: number;
   deadlineFrom?: Date;
   deadlineTo?: Date;
   search?: string;
@@ -37,3 +38,24 @@ export const selectTaskListItem = {
   assignee: userSummarySelect,
   project: { select: { id: true, name: true } },
 } as const;
+
+/** A task row plus its attached tags (used on read paths: list + detail). */
+export const selectTaskWithTags = {
+  ...selectTaskListItem,
+  tags: { select: { tag: { select: { id: true, name: true } } } },
+} as const;
+
+/** Flatten the `tags` join rows (TaskTag) into a plain `tags: [{ id, name }]` array. */
+export const flattenTaskTags = <
+  T extends { tags?: { tag: { id: number; name: string } | null }[] },
+>(
+  task: T,
+): Omit<T, 'tags'> & { tags: { id: number; name: string }[] } => {
+  const { tags, ...rest } = task;
+  return {
+    ...rest,
+    tags: (tags ?? [])
+      .map((tt) => tt.tag)
+      .filter((t): t is { id: number; name: string } => t !== null),
+  };
+};

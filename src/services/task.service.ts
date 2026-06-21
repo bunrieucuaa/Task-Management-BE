@@ -6,6 +6,8 @@ import { ServiceError } from '@/shared/errors/service-error';
 import { isPrivileged } from '@/shared/auth/roles';
 import {
   selectTaskListItem,
+  selectTaskWithTags,
+  flattenTaskTags,
   type PaginatedResult,
   type TaskListParams,
 } from '@/shared/interfaces/ITask';
@@ -13,6 +15,10 @@ import type { CreateTaskDto, UpdateTaskDto } from '@/dtos/task.dto';
 import { assertProjectAccess } from './project.service';
 
 type TaskItem = Prisma.TaskGetPayload<{ select: typeof selectTaskListItem }>;
+type TaskWithTags = Omit<
+  Prisma.TaskGetPayload<{ select: typeof selectTaskWithTags }>,
+  'tags'
+> & { tags: { id: number; name: string }[] };
 
 /** Assignee must already be a member of the task's project. */
 const assertAssigneeIsMember = async (projectId: number, assigneeId: number): Promise<void> => {
@@ -63,6 +69,35 @@ export const assertTaskAccessById = async (
   return task;
 };
 
+/**
+ * Load a task and assert the user may EDIT it (creator, current assignee, or a
+ * privileged role). Throws TASK_NOT_FOUND / FORBIDDEN. Exposed so sub-resources
+ * that mutate a task (tags, ...) can reuse the same gate as updateTask.
+ */
+export const assertTaskEditable = async (
+  userId: number,
+  role: UserRole | null,
+  taskId: number,
+): Promise<{ id: number; projectId: number | null; creatorId: number | null; assigneeId: number | null }> => {
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+    select: { id: true, projectId: true, creatorId: true, assigneeId: true },
+  });
+  if (!task) {
+    throw new ServiceError(RESPONSE_CODES.TASK_NOT_FOUND);
+  }
+
+  await assertTaskAccess(userId, role, task);
+
+  const canEdit =
+    isPrivileged(role) || task.creatorId === userId || task.assigneeId === userId;
+  if (!canEdit) {
+    throw new ServiceError(RESPONSE_CODES.FORBIDDEN, 'You are not allowed to edit this task');
+  }
+
+  return task;
+};
+
 export const createTask = async (
   creatorId: number,
   role: UserRole | null,
@@ -92,7 +127,7 @@ export const getTasks = async (
   userId: number,
   role: UserRole | null,
   params: TaskListParams = {},
-): Promise<PaginatedResult<TaskItem>> => {
+): Promise<PaginatedResult<TaskWithTags>> => {
   const {
     page = 1,
     limit = 20,
@@ -100,6 +135,7 @@ export const getTasks = async (
     assigneeId,
     status,
     priority,
+    tagId,
     deadlineFrom,
     deadlineTo,
     search,
@@ -129,6 +165,9 @@ export const getTasks = async (
   if (priority) {
     conditions.push({ priority });
   }
+  if (tagId !== undefined) {
+    conditions.push({ tags: { some: { tagId } } });
+  }
   if (deadlineFrom || deadlineTo) {
     conditions.push({
       deadline: {
@@ -152,14 +191,14 @@ export const getTasks = async (
 
   const data = await prisma.task.findMany({
     where,
-    select: selectTaskListItem,
+    select: selectTaskWithTags,
     orderBy: { [sortBy]: sortOrder },
     skip: (page - 1) * limit,
     take: limit,
   });
 
   return {
-    data,
+    data: data.map(flattenTaskTags),
     pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
   };
 };
@@ -168,17 +207,17 @@ export const getTaskById = async (
   userId: number,
   role: UserRole | null,
   taskId: number,
-): Promise<TaskItem> => {
+): Promise<TaskWithTags> => {
   const task = await prisma.task.findUnique({
     where: { id: taskId },
-    select: selectTaskListItem,
+    select: selectTaskWithTags,
   });
   if (!task) {
     throw new ServiceError(RESPONSE_CODES.TASK_NOT_FOUND);
   }
 
   await assertTaskAccess(userId, role, task);
-  return task;
+  return flattenTaskTags(task);
 };
 
 export const updateTask = async (
@@ -187,22 +226,7 @@ export const updateTask = async (
   taskId: number,
   dto: UpdateTaskDto,
 ): Promise<TaskItem> => {
-  const task = await prisma.task.findUnique({
-    where: { id: taskId },
-    select: { id: true, projectId: true, creatorId: true, assigneeId: true },
-  });
-  if (!task) {
-    throw new ServiceError(RESPONSE_CODES.TASK_NOT_FOUND);
-  }
-
-  await assertTaskAccess(userId, role, task);
-
-  // Ownership: only creator, current assignee, or admin may edit.
-  const canEdit =
-    isPrivileged(role) || task.creatorId === userId || task.assigneeId === userId;
-  if (!canEdit) {
-    throw new ServiceError(RESPONSE_CODES.FORBIDDEN, 'You are not allowed to edit this task');
-  }
+  const task = await assertTaskEditable(userId, role, taskId);
 
   if (dto.assigneeId != null && task.projectId != null) {
     await assertAssigneeIsMember(task.projectId, dto.assigneeId);

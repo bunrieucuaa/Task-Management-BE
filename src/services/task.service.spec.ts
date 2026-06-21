@@ -110,6 +110,27 @@ describe('getTasks', () => {
     });
   });
 
+  it('filters by tagId via the task_tags relation', async () => {
+    db.task.count.mockResolvedValue(0);
+    db.task.findMany.mockResolvedValue([]);
+
+    await getTasks(7, UserRole.ADMIN, { tagId: 3 });
+
+    const where = db.task.count.mock.calls[0][0].where;
+    expect(where.AND).toContainEqual({ tags: { some: { tagId: 3 } } });
+  });
+
+  it('flattens the tags join rows into a flat tags array on each row', async () => {
+    db.task.count.mockResolvedValue(1);
+    db.task.findMany.mockResolvedValue([
+      { id: 1, title: 'T', tags: [{ tag: { id: 9, name: 'bug' } }] },
+    ]);
+
+    const result = await getTasks(7, UserRole.ADMIN, {});
+
+    expect(result.data[0]).toMatchObject({ id: 1, tags: [{ id: 9, name: 'bug' }] });
+  });
+
   it('applies status, priority and search filters', async () => {
     db.task.count.mockResolvedValue(0);
     db.task.findMany.mockResolvedValue([]);

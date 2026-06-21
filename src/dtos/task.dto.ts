@@ -33,6 +33,7 @@ export const ListTasksQuerySchema = z.object({
   assigneeId: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().optional()),
   status: z.preprocess(emptyToUndefined, z.nativeEnum(TaskStatus).optional()),
   priority: z.preprocess(emptyToUndefined, z.nativeEnum(TaskPriority).optional()),
+  tagId: z.preprocess(emptyToUndefined, z.coerce.number().int().positive().optional()),
   deadlineFrom: z.preprocess(emptyToUndefined, z.coerce.date().optional()),
   deadlineTo: z.preprocess(emptyToUndefined, z.coerce.date().optional()),
   search: z.preprocess(emptyToUndefined, z.string().optional()),

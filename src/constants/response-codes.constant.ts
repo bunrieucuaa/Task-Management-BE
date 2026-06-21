@@ -34,9 +34,12 @@ export const RESPONSE_CODES = {
   PROJECT_NOT_FOUND: 'PROJECT_NOT_FOUND',
   TASK_NOT_FOUND: 'TASK_NOT_FOUND',
   COMMENT_NOT_FOUND: 'COMMENT_NOT_FOUND',
+  TAG_NOT_FOUND: 'TAG_NOT_FOUND',
 
   // Conflict Errors (4091-4099)
   USER_ALREADY_EXISTS: 'USER_ALREADY_EXISTS',
+  TAG_ALREADY_EXISTS: 'TAG_ALREADY_EXISTS',
+  TAG_ALREADY_ATTACHED: 'TAG_ALREADY_ATTACHED',
 
   // Account Status Errors (4231-4239)
   ACCOUNT_DISABLED: 'ACCOUNT_DISABLED',
@@ -135,12 +138,27 @@ export const ResponseCodeConfig: Record<ResponseCodeKey, ResponseCodeConfig> = {
     httpStatus: 404,
     message: 'Comment not found',
   },
+  TAG_NOT_FOUND: {
+    code: 4045,
+    httpStatus: 404,
+    message: 'Tag not found',
+  },
 
   // Conflict Errors
   USER_ALREADY_EXISTS: {
     code: 4091,
     httpStatus: 409,
     message: 'User already exists',
+  },
+  TAG_ALREADY_EXISTS: {
+    code: 4092,
+    httpStatus: 409,
+    message: 'A tag with this name already exists',
+  },
+  TAG_ALREADY_ATTACHED: {
+    code: 4093,
+    httpStatus: 409,
+    message: 'This tag is already attached to the task',
   },
 
   // Account Status Errors
