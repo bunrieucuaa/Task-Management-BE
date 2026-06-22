@@ -44,11 +44,14 @@ rồi trỏ Render sang `master` cho production ổn định.
   lọc `?tagId=`; helper `assertTaskEditable`.
 - ✅ **ActivityLog BE** (`ae85f1f`): auto-log (TASK_CREATED, STATUS/ASSIGNEE/DEADLINE/PRIORITY_CHANGED,
   TAG_ADDED/REMOVED), `GET /tasks/:id/activities`. **213 test.**
-- ✅ **FE Đợt 1** (2026-06-22, chưa commit/deploy): TagRepository/ActivityRepository + tagsSlice + util
-  tagColor/describeActivity, TagPicker trong TaskFormDialog (edit mode), badge + lọc theo tag ở Tasks.tsx,
-  TaskActivityDialog (timeline) mở từ dropdown. 186 test FE pass. Xem `react-task-managerment/.handoff/progress.md`.
+- ✅ **FE Đợt 1** (commit `0361e3d`, đã push `origin/dev` 2026-06-22): TagRepository/ActivityRepository +
+  tagsSlice + util tagColor/describeActivity, TagPicker trong TaskFormDialog (edit mode), badge + lọc theo
+  tag ở Tasks.tsx, TaskActivityDialog (timeline) mở từ dropdown. 186 test FE pass. Xem
+  `react-task-managerment/.handoff/progress.md`.
 - ⏭️ (tuỳ chọn) integration test supertest cho route tag/activity.
-- **Đợt 2** (chưa làm): dnd-kit Kanban đổi status, animation chuyển trang + toggle dark mode (Framer Motion).
+- ✅ **Đợt 2 FE** (2026-06-22, chỉ FE, chưa commit/push): dnd-kit Kanban (view toggle, kéo đổi status →
+  tái dùng update status → BE tự sinh ActivityLog) + Framer Motion (page transition + toggle dark mode).
+  **Không đổi BE.** 208 test FE. Spec: `.handoff/specs/2026-06-22-kanban-animation.md`.
 - Còn lại P2: Task attachments (upload), AI (`AiHistory`).
 
 ## Quyết định
