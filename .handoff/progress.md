@@ -44,8 +44,9 @@ rồi trỏ Render sang `master` cho production ổn định.
   lọc `?tagId=`; helper `assertTaskEditable`.
 - ✅ **ActivityLog BE** (`ae85f1f`): auto-log (TASK_CREATED, STATUS/ASSIGNEE/DEADLINE/PRIORITY_CHANGED,
   TAG_ADDED/REMOVED), `GET /tasks/:id/activities`. **213 test.**
-- ⏭️ **FE Đợt 1** (chưa làm): TagRepository/ActivityRepository, combobox tag trong TaskFormDialog,
-  badge tag + lọc theo tag ở Tasks.tsx, tab "Lịch sử" timeline trong dialog task.
+- ✅ **FE Đợt 1** (2026-06-22, chưa commit/deploy): TagRepository/ActivityRepository + tagsSlice + util
+  tagColor/describeActivity, TagPicker trong TaskFormDialog (edit mode), badge + lọc theo tag ở Tasks.tsx,
+  TaskActivityDialog (timeline) mở từ dropdown. 186 test FE pass. Xem `react-task-managerment/.handoff/progress.md`.
 - ⏭️ (tuỳ chọn) integration test supertest cho route tag/activity.
 - **Đợt 2** (chưa làm): dnd-kit Kanban đổi status, animation chuyển trang + toggle dark mode (Framer Motion).
 - Còn lại P2: Task attachments (upload), AI (`AiHistory`).
