@@ -3,7 +3,9 @@
 > Ngày: 2026-06-21. Phạm vi: 2 feature P2 đầu tiên. Đợt 2 (animation + dnd-kit Kanban) có spec riêng.
 > Repo: `task-be` (BE) + `react-task-managerment` (FE). Theo TDD + pattern sẵn có.
 >
-> **Tiến độ:** ✅ Tags BE (commit `25614fe`, 208 test). ⏭️ Tiếp: ActivityLog BE → FE (Tags + ActivityLog).
+> **Tiến độ:** ✅ Tags BE (`25614fe`) + ✅ ActivityLog BE (`ae85f1f`) — **toàn bộ BE Đợt 1 xong, 213 test**.
+> ⏭️ Còn lại: **FE** (TagRepository/ActivityRepository, combobox tag + badge + lọc, timeline "Lịch sử")
+> và (tuỳ chọn) integration test supertest cho route tag/activity ở BE.
 
 ## Mục tiêu
 - **Tags (global):** gắn nhãn task bằng danh sách tag dùng chung toàn hệ thống; lọc task theo tag.

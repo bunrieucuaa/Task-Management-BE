@@ -36,17 +36,19 @@ rồi trỏ Render sang `master` cho production ổn định.
 - Bật coverage threshold (floor 80/80/82/80).
 </details>
 
-## Việc kế tiếp — P2 (có sẵn trong DB schema, chưa implement)
+## Việc kế tiếp — P2
 
-> Bắt đầu đợt này: **Tags + ActivityLog** (2026-06-21).
+> Đợt 1 (2026-06-21): spec ở `.handoff/specs/2026-06-21-tags-activitylog.md`.
 
-- **Tags / TaskTag** — model đã có (`tags`, `task_tags` với `@@unique([taskId, tagId])`). Cần:
-  CRUD tag + gắn/gỡ tag cho task + lọc task theo tag. (FE dùng dnd-kit cho kéo thả task — xem
-  `react-task-managerment/.handoff/`.)
-- **ActivityLog** — model đã có (`activity_logs`: `taskId`, `userId`, `action`, `oldValue`/`newValue`
-  Json, `createdAt`). Ghi log khi task đổi (create/update status/assignee/...), API liệt kê theo task.
-- Còn lại (chưa làm): Task attachments (upload file), AI (`AiHistory`/`AiActionType`).
-- (tuỳ chọn) DB integration test thật bằng Testcontainers nếu muốn kiểm Prisma query thật.
+- ✅ **Tags BE** (`25614fe`): catalog CRUD (`/tags`), gắn/gỡ (`/tasks/:id/tags`), task include `tags`,
+  lọc `?tagId=`; helper `assertTaskEditable`.
+- ✅ **ActivityLog BE** (`ae85f1f`): auto-log (TASK_CREATED, STATUS/ASSIGNEE/DEADLINE/PRIORITY_CHANGED,
+  TAG_ADDED/REMOVED), `GET /tasks/:id/activities`. **213 test.**
+- ⏭️ **FE Đợt 1** (chưa làm): TagRepository/ActivityRepository, combobox tag trong TaskFormDialog,
+  badge tag + lọc theo tag ở Tasks.tsx, tab "Lịch sử" timeline trong dialog task.
+- ⏭️ (tuỳ chọn) integration test supertest cho route tag/activity.
+- **Đợt 2** (chưa làm): dnd-kit Kanban đổi status, animation chuyển trang + toggle dark mode (Framer Motion).
+- Còn lại P2: Task attachments (upload), AI (`AiHistory`).
 
 ## Quyết định
 
