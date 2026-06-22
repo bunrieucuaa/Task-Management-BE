@@ -49,7 +49,7 @@ rồi trỏ Render sang `master` cho production ổn định.
   tag ở Tasks.tsx, TaskActivityDialog (timeline) mở từ dropdown. 186 test FE pass. Xem
   `react-task-managerment/.handoff/progress.md`.
 - ⏭️ (tuỳ chọn) integration test supertest cho route tag/activity.
-- ✅ **Đợt 2 FE** (2026-06-22, chỉ FE, chưa commit/push): dnd-kit Kanban (view toggle, kéo đổi status →
+- ✅ **Đợt 2 FE** (2026-06-22, chỉ FE, FE commit `9b91f78` + push `origin/dev`): dnd-kit Kanban (view toggle, kéo đổi status →
   tái dùng update status → BE tự sinh ActivityLog) + Framer Motion (page transition + toggle dark mode).
   **Không đổi BE.** 208 test FE. Spec: `.handoff/specs/2026-06-22-kanban-animation.md`.
 - Còn lại P2: Task attachments (upload), AI (`AiHistory`).
